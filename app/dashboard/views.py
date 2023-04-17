@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from home import models as home_models
 
 
 def index(request):
@@ -6,4 +7,5 @@ def index(request):
 
 
 def course_list(request):
-    return render(request, "dashboard/courses.html", {})
+    course_list = home_models.GolfCourse.objects.all()
+    return render(request, "dashboard/courses.html", {"course_list": course_list})
