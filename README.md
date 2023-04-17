@@ -14,21 +14,24 @@ Tee
 
 Hole
     - Hole Number
+    - Nickname
     - Course
 
 Course
     - Name
-    - Holes
+    - Holes (9 or 18)
     - Tee Time Link
     - Website Link
 
 CoreUser
     - First Name
     - Last Name
+    - Email
 
 Game
     - Date Played
     - Course
+    - Holes Played
 
 UserGameLink
     - CoreUser
