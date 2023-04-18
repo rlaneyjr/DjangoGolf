@@ -194,6 +194,12 @@
                                 Games
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if 'players' in request.path %}active{% endif %}" href="{% url 'dashboard:players' %}">
+                                <span data-feather="shopping-cart" class="align-text-bottom"></span>
+                                Players
+                            </a>
+                        </li>
                     </ul>    
                 </div>
             </nav>

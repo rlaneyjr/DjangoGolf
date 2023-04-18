@@ -1,0 +1,40 @@
+{% extends "base-dashboard.html" %}
+
+{% block button_bar %}
+    <a href="#" class="btn btn-sm btn-outline-secondary">Add Player</a>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        {% if player_list %}
+            <table class="table">
+                <thead>
+                    <th style="width: 5%;">&nbsp;</th>
+                    <th>Name</th>
+                    <th>User Account</th>
+                </thead>
+                <tbody class="align-middle">
+                    {% for player in player_list %}
+                    <tr>
+                        <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
+                        <td>{{player.name}}</td>
+                        {% if player.user_account %}
+                            <td>{{player.user_account.email}}</td>
+                        {% else %}
+                            <td>Not Set</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No Players Found</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block page_styles %}{% endblock %}
+
+{% block page_scripts %}{% endblock %}
