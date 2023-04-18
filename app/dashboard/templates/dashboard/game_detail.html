@@ -29,7 +29,7 @@
                         <tbody class="align-middle">
                         {% for player in game_data.players.all %}
                             <tr>
-                                <td><button type="button" class="btn btn-danger btn-sm">Remove</button></td>
+                                <td><button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#remove-player-modal" data-player-id="{{player.id}}">Remove</button></td>
                                 <td>{{player.name}}</td>
                             </tr>
                         {% endfor %}
@@ -71,6 +71,24 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="remove-player-modal" tabindex="-1" aria-labelledby="remove-player-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="remove-player-modal-label">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to remove this player from the game?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirm-remove-player-button">Yes, Remove</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block page_styles %}{% endblock %}
@@ -78,8 +96,9 @@
 {% block page_scripts %}
 <script>
     const gameId = "{{game_data.id}}";
-    const addPlayerUrl = "{% url 'dashboard:ajax_add_player_to_game' %}";
+    const managePlayerUrl = "{% url 'dashboard:ajax_manage_players_for_game' %}";
     const csrfToken = "{{csrf_token}}";
+    let removePlayerId = null;
 
     document.getElementById("add-player-button").addEventListener("click", async (event) => {
         const playerId = document.getElementById("add-player-select").value;
@@ -89,11 +108,53 @@
 
         const data = {
             playerId: document.getElementById("add-player-select").value,
-            game: gameId
+            game: gameId,
+            action: "add-player"
         }
 
         try {
-            const response = await fetch(addPlayerUrl, {
+            const response = await fetch(managePlayerUrl, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                throw new Error("Error sending request");
+                return;
+            }
+            const jsonData = await response.json();
+            if (jsonData.status === "success") {
+                return window.location.reload(true);
+            }
+        } catch(e) {
+            alert("Error: " + e.message);
+        }
+    });
+
+    document.getElementById("remove-player-modal").addEventListener("show.bs.modal", (event) => {
+        const buttonClicked = event.relatedTarget;
+        removePlayerId = buttonClicked.dataset.playerId;
+    });
+
+    document.getElementById("remove-player-modal").addEventListener("hide.bs.modal", (event) => {
+        removePlayerId = null;
+    });
+
+    document.getElementById("confirm-remove-player-button").addEventListener("click", async (event) => {
+        if (removePlayerId === null) {
+            return;
+        }
+
+        const data = {
+            action: "remove-player",
+            playerId: removePlayerId,
+            game: gameId
+        }
+        try {
+            const response = await fetch(managePlayerUrl, {
                 method: "POST",
                 headers: {
                     "X-CSRFToken": csrfToken,

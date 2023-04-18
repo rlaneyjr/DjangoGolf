@@ -123,17 +123,19 @@ def edit_player(request, pk):
     return render(request, "dashboard/create_player.html", {"form": form})
 
 
-def ajax_add_player_to_game(request):
+def ajax_manage_players_for_game(request):
     data = json.loads(request.body)
-    if not all([data["playerId"], data["game"]]):
+    if not all([data["playerId"], data["game"], data["action"]]):
         return HttpResponseBadRequest("Missing Data")
     game_data = home_models.Game.objects.filter(pk=data["game"]).first()
     player_data = home_models.Player.objects.filter(pk=data["playerId"]).first()
     if not all([game_data, player_data]):
         return HttpResponseBadRequest("Unable to find either game or player")
 
-    if player_data in game_data.players.all():
-        return HttpResponseBadRequest("Player already part of game")
-
-    game_data.players.add(player_data)
+    if data["action"] == "add-player":
+        if player_data in game_data.players.all():
+            return HttpResponseBadRequest("Player already part of game")
+        game_data.players.add(player_data)
+    elif data["action"] == "remove-player":
+        game_data.players.remove(player_data)
     return JsonResponse({"status": "success"})
