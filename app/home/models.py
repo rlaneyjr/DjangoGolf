@@ -61,5 +61,5 @@ class HoleScore(models.Model):
 class Player(models.Model):
     name = models.CharField(max_length=64)
     user_account = models.OneToOneField(
-        get_user_model(), on_delete=models.CASCADE, blank=True
+        get_user_model(), on_delete=models.CASCADE, blank=True, null=True
     )
