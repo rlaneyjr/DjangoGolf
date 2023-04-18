@@ -71,3 +71,8 @@ def create_tee(request, hole_pk):
 def game_list(request):
     game_list = home_models.Game.objects.all()
     return render(request, "dashboard/games.html", {"game_list": game_list})
+
+
+def game_detail(request, pk):
+    game_data = get_object_or_404(home_models.Game, pk=pk)
+    return render(request, "dashboard/game_detail.html", {"game_data": game_data})

@@ -20,7 +20,7 @@
             <tbody class="align-middle">
             {% for game in game_list %}
                 <tr>
-                    <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
+                    <td><a href="{% url 'dashboard:game_detail' game.id %}" class="btn btn-primary btn-sm">View</a></td>
                     <td>{{game.course.name}}</td>
                     <td>{{game.date_played}}</td>
                 </tr>

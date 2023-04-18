@@ -1,0 +1,39 @@
+{% extends "base-dashboard.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header fw-bold">
+                Game Detail
+            </div>
+            <div class="card-body">
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                Players
+            </div>
+            <div class="card-body">
+                {% if player_list %}
+                    {% for player in player_list %}
+                    
+                    {% endfor %}
+                {% else %}
+                    <p class="card-text">No Players Found</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-primary btn-sm">Add Player</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_styles %}{% endblock %}
+
+{% block page_scripts %}{% endblock %}
