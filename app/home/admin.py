@@ -3,3 +3,4 @@ from . import models
 
 
 admin.site.register(models.GolfCourse)
+admin.site.register(models.Hole)
