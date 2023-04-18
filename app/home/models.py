@@ -44,18 +44,18 @@ class Game(models.Model):
     holes_played = models.CharField(
         max_length=64, choices=HOLE_CHOICES, default=HOLE_CHOICES[0][0]
     )
-    players = models.ManyToManyField(get_user_model(), through="UserGameLink")
+    # players = models.ManyToManyField(get_user_model(), through="UserGameLink")
 
 
-class UserGameLink(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+# class UserGameLink(models.Model):
+#     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+#     game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
 
 class HoleScore(models.Model):
     hole = models.ForeignKey(Hole, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
-    game = models.ForeignKey(UserGameLink, on_delete=models.CASCADE)
+    # game = models.ForeignKey(UserGameLink, on_delete=models.CASCADE)
 
 
 class Player(models.Model):
