@@ -1,5 +1,9 @@
 {% extends "base-dashboard.html" %}
 
+{% block button_bar %}
+    <a href="{% url 'dashboard:courses' %}" class="btn btn-sm btn-outline-secondary">Back to Course List</a>
+{% endblock %}
+
 {% block content %}
 <div class="row">
     <div class="col-6">
