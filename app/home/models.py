@@ -56,3 +56,8 @@ class HoleScore(models.Model):
     hole = models.ForeignKey(Hole, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
     game = models.ForeignKey(UserGameLink, on_delete=models.CASCADE)
+
+
+class Player(models.Model):
+    name = models.CharField(max_length=64)
+    user_account = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
