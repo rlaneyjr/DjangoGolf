@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -25,6 +26,12 @@ urlpatterns = [
         "logout/",
         auth_views.LogoutView.as_view(template_name="registration/logout.html"),
         name="logout",
+    ),
+    path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="api-schema"),
+        name="api-docs",
     ),
     path("", include("home.urls")),
     path("dashboard/", include("dashboard.urls")),
