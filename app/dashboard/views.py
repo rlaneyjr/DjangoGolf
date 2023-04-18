@@ -2,20 +2,24 @@ import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponseBadRequest
+from django.contrib.auth.decorators import login_required
 from home import models as home_models
 from . import forms
 from . import utils
 
 
+@login_required
 def index(request):
     return render(request, "dashboard/index.html", {})
 
 
+@login_required
 def course_list(request):
     course_list = home_models.GolfCourse.objects.all()
     return render(request, "dashboard/courses.html", {"course_list": course_list})
 
 
+@login_required
 def create_course(request):
     if request.method == "POST":
         form = forms.GolfCourseForm(request.POST)
@@ -29,6 +33,7 @@ def create_course(request):
     return render(request, "dashboard/create_course.html", {"form": form})
 
 
+@login_required
 def course_detail(request, pk):
     course_data = get_object_or_404(home_models.GolfCourse, pk=pk)
     course_location = None
@@ -48,6 +53,7 @@ def course_detail(request, pk):
     )
 
 
+@login_required
 def hole_detail(request, pk):
     hole_data = get_object_or_404(home_models.Hole, pk=pk)
     tee_list = home_models.Tee.objects.filter(hole=hole_data)
@@ -59,6 +65,7 @@ def hole_detail(request, pk):
     )
 
 
+@login_required
 def create_tee(request, hole_pk):
     if request.method == "POST":
         hole_data = get_object_or_404(home_models.Hole, pk=hole_pk)
@@ -73,11 +80,13 @@ def create_tee(request, hole_pk):
     return render(request, "dashboard/create_tee.html", {"form": form})
 
 
+@login_required
 def game_list(request):
     game_list = home_models.Game.objects.all()
     return render(request, "dashboard/games.html", {"game_list": game_list})
 
 
+@login_required
 def game_detail(request, pk):
     game_data = get_object_or_404(home_models.Game, pk=pk)
     player_list = home_models.Player.objects.all().exclude(game__in=[game_data.id])
@@ -88,16 +97,19 @@ def game_detail(request, pk):
     )
 
 
+@login_required
 def player_list(request):
     player_list = home_models.Player.objects.all()
     return render(request, "dashboard/players.html", {"player_list": player_list})
 
 
+@login_required
 def player_detail(request, pk):
     player_data = get_object_or_404(home_models.Player, pk=pk)
     return render(request, "dashboard/player_detail.html", {"player_data": player_data})
 
 
+@login_required
 def create_player(request):
     if request.method == "POST":
         form = forms.PlayerForm(request.POST)
@@ -110,6 +122,7 @@ def create_player(request):
     return render(request, "dashboard/create_player.html", {"form": form})
 
 
+@login_required
 def edit_player(request, pk):
     player_data = get_object_or_404(home_models.Player, pk=pk)
     if request.method == "POST":
@@ -123,6 +136,7 @@ def edit_player(request, pk):
     return render(request, "dashboard/create_player.html", {"form": form})
 
 
+@login_required
 def ajax_manage_players_for_game(request):
     data = json.loads(request.body)
     if not all([data["playerId"], data["game"], data["action"]]):
