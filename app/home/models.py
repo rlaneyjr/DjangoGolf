@@ -17,6 +17,9 @@ class GolfCourse(models.Model):
     state = models.CharField(max_length=128, blank=True)
     zip_code = models.CharField(max_length=128, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Hole(models.Model):
     name = models.CharField(max_length=64)
