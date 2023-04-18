@@ -60,7 +60,7 @@
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                    {% for hole in course_data.hole_set.all %}
+                    {% for hole in hole_list %}
                         <tr>
                             <td><a href="#" class="btn btn-primary btn-sm">View</a>
                             <td>{{hole.name}}</td>

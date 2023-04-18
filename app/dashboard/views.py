@@ -28,6 +28,7 @@ def add_course(request):
 def course_detail(request, pk):
     course_data = get_object_or_404(home_models.GolfCourse, pk=pk)
     course_location = None
+    hole_list = home_models.Hole.objects.filter(course=course_data).order_by("name")
     if all([course_data.city, course_data.state, course_data.zip_code]):
         course_location = (
             f"{course_data.city}, {course_data.state}, {course_data.zip_code}"
@@ -35,5 +36,9 @@ def course_detail(request, pk):
     return render(
         request,
         "dashboard/course_detail.html",
-        {"course_data": course_data, "course_location": course_location},
+        {
+            "course_data": course_data,
+            "course_location": course_location,
+            "hole_list": hole_list,
+        },
     )
