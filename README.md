@@ -15,6 +15,7 @@ Tee
 Hole
     - Hole Number
     - Nickname
+    - Par
     - Course
 
 Course
