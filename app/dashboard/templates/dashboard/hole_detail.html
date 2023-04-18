@@ -31,6 +31,13 @@
             <div class="card-body">
                 {% if tee_list %}
                     <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">&nbsp;</th>
+                                <th>Name</th>
+                                <th>Distance</th>
+                            </tr>
+                        </thead>
                         <tbody class="align-middle">
                         {% for tee in tee_list %}
                             <tr>
@@ -46,7 +53,7 @@
                 {% endif %}
             </div>
             <div class="card-footer">
-                <a href="#" class="btn btn-primary btn-sm">Add Tee</a>
+                <a href="{% url 'dashboard:create_tee' hole_data.id %}" class="btn btn-primary btn-sm">Add Tee</a>
             </div>
         </div>
     </div>

@@ -46,9 +46,23 @@ def course_detail(request, pk):
 
 def hole_detail(request, pk):
     hole_data = get_object_or_404(home_models.Hole, pk=pk)
+    tee_list = home_models.Tee.objects.filter(hole=hole_data)
     course_data = hole_data.course
     return render(
         request,
         "dashboard/hole_detail.html",
-        {"hole_data": hole_data, "course_data": course_data},
+        {"hole_data": hole_data, "course_data": course_data, "tee_list": tee_list},
     )
+
+
+def create_tee(request, hole_pk):
+    if request.method == "POST":
+        hole_data = get_object_or_404(home_models.Hole, pk=hole_pk)
+        form = forms.TeeForm(request.POST)
+        if form.is_valid():
+            tee = form.save(commit=False)
+            tee.hole = hole_data
+            tee.save()
+            return redirect("dashboard:hole_detail", hole_pk)
+    form = forms.TeeForm()
+    return render(request, "dashboard/create_tee.html", {"form": form})
