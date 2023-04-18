@@ -38,7 +38,7 @@ UserGameLink
     - CoreUser
     - Game
 
-HoleScoreLink
+HoleScore
     - UserGameLink
     - Hole
     - Score
