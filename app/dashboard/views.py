@@ -13,7 +13,7 @@ def course_list(request):
     return render(request, "dashboard/courses.html", {"course_list": course_list})
 
 
-def add_course(request):
+def create_course(request):
     if request.method == "POST":
         form = forms.GolfCourseForm(request.POST)
         if form.is_valid():
@@ -22,7 +22,7 @@ def add_course(request):
             return redirect("dashboard:courses")
     else:
         form = forms.GolfCourseForm()
-    return render(request, "dashboard/add_course.html", {"form": form})
+    return render(request, "dashboard/create_course.html", {"form": form})
 
 
 def course_detail(request, pk):
