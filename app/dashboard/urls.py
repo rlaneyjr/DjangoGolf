@@ -10,4 +10,5 @@ urlpatterns = [
     path("courses/<int:pk>/", views.course_detail, name="course_detail"),
     path("holes/<int:pk>/", views.hole_detail, name="hole_detail"),
     path("tees/<int:hole_pk>/", views.create_tee, name="create_tee"),
+    path("games/", views.game_list, name="games"),
 ]

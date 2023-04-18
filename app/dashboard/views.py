@@ -66,3 +66,8 @@ def create_tee(request, hole_pk):
             return redirect("dashboard:hole_detail", hole_pk)
     form = forms.TeeForm()
     return render(request, "dashboard/create_tee.html", {"form": form})
+
+
+def game_list(request):
+    game_list = home_models.Game.objects.all()
+    return render(request, "dashboard/games.html", {"game_list": game_list})
