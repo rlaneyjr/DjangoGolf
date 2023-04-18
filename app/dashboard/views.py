@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from home import models as home_models
 from . import forms
+from . import utils
 
 
 def index(request):
@@ -16,7 +17,8 @@ def add_course(request):
     if request.method == "POST":
         form = forms.GolfCourseForm(request.POST)
         if form.is_valid():
-            form.save()
+            course = form.save()
+            utils.create_holes_for_course(course)
             return redirect("dashboard:courses")
     else:
         form = forms.GolfCourseForm()
