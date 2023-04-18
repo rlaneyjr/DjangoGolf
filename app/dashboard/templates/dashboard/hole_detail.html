@@ -1,0 +1,54 @@
+{% extends "base-dashboard.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header fw-bold">
+                Hole Details: {{course_data.name}}
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="fw-bold d-block">Name:</label>
+                    {{course_data.name}}
+                </div>
+                <div>
+                    <label class="fw-bold d-block">Holes:</label>
+                    {{course_data.get_hole_count_display}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header fw-bold">
+                Tees
+            </div>
+            <div class="card-body">
+                {% if tee_list %}
+                    <table class="table">
+                        <tbody class="align-middle">
+                        {% for tee in tee_list %}
+                            <tr>
+                                <td><a href="#" class="btn btn-danger btn-sm">Delete</a></td>
+                                <td>{{tee.name}}</td>
+                                <td>{{tee.distance}}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="card-text">No tees found for this hole</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-primary btn-sm">Add Tee</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_styles %}{% endblock %}
+
+{% block page_scripts %}{% endblock %}

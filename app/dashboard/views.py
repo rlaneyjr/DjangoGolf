@@ -42,3 +42,13 @@ def course_detail(request, pk):
             "hole_list": hole_list,
         },
     )
+
+
+def hole_detail(request, pk):
+    hole_data = get_object_or_404(home_models.Hole, pk=pk)
+    course_data = hole_data.course
+    return render(
+        request,
+        "dashboard/hole_detail.html",
+        {"hole_data": hole_data, "course_data": course_data},
+    )
