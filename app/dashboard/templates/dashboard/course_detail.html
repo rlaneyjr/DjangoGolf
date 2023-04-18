@@ -1,0 +1,79 @@
+{% extends "base-dashboard.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header fw-bold">
+                Course Details
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="fw-bold d-block">Name:</label>
+                    {{course_data.name}}
+                </div>
+                <div class="mb-3">
+                    <label class="fw-bold d-block">Holes:</label>
+                    {{course_data.get_hole_count_display}}
+                </div>
+                <div class="mb-3">
+                    <label class="fw-bold d-block">Tee Time Link:</label>
+                    {% if course_data.tee_time_link %}
+                        <a href="#">{{course_data.tee_time_link }}</a>
+                    {% else %}
+                        <p>Not Found</p>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="fw-bold d-block">Website:</label>
+                    {% if course_data.website_link %}
+                        <a href="#">{{course_data.website_link }}</a>
+                    {% else %}
+                        <p>Not Found</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="fw-bold d-block">Location:</label>
+                    {% if course_location %}
+                        {{course_location}}
+                    {% else %}
+                        <p class="card-text">Not Found</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-primary btn-sm">Edit</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header fw-bold">
+                Holes
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                    {% for hole in course_data.hole_set.all %}
+                        <tr>
+                            <td><a href="#" class="btn btn-primary btn-sm">View</a>
+                            <td>{{hole.name}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_styles %}{% endblock %}
+
+{% block page_scripts %}{% endblock %}

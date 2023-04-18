@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from home import models as home_models
 from . import forms
 from . import utils
@@ -23,3 +23,17 @@ def add_course(request):
     else:
         form = forms.GolfCourseForm()
     return render(request, "dashboard/add_course.html", {"form": form})
+
+
+def course_detail(request, pk):
+    course_data = get_object_or_404(home_models.GolfCourse, pk=pk)
+    course_location = None
+    if all([course_data.city, course_data.state, course_data.zip_code]):
+        course_location = (
+            f"{course_data.city}, {course_data.state}, {course_data.zip_code}"
+        )
+    return render(
+        request,
+        "dashboard/course_detail.html",
+        {"course_data": course_data, "course_location": course_location},
+    )
