@@ -20,6 +20,7 @@ class GolfCourse(models.Model):
 class Hole(models.Model):
     name = models.CharField(max_length=64)
     nickname = models.CharField(max_length=128, blank=True)
+    par = models.IntegerField(default=3)
     course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
 
 
