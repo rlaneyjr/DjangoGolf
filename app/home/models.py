@@ -21,3 +21,9 @@ class Hole(models.Model):
     name = models.CharField(max_length=64)
     nickname = models.CharField(max_length=128, blank=True)
     course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
+
+
+class Tee(models.Model):
+    name = models.CharField(max_length=64)
+    distance = models.CharField(max_length=10)
+    hole = models.ForeignKey(Hole, on_delete=models.CASCADE)
