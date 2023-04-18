@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "crispy_forms",
     "crispy_bootstrap5",
     "core",
@@ -142,3 +143,12 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 # Login stuff
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGIN_URL = "/login/"
+
+# Django Rest Framework Settings
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+    ]
+}
