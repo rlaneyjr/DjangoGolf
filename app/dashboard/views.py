@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from home import models as home_models
 from . import forms
 from . import utils
@@ -19,6 +20,7 @@ def create_course(request):
         if form.is_valid():
             course = form.save()
             utils.create_holes_for_course(course)
+            messages.add_message(request, messages.INFO, "Course Created.")
             return redirect("dashboard:courses")
     else:
         form = forms.GolfCourseForm()
@@ -63,6 +65,7 @@ def create_tee(request, hole_pk):
             tee = form.save(commit=False)
             tee.hole = hole_data
             tee.save()
+            messages.add_message(request, messages.INFO, "Tee Created.")
             return redirect("dashboard:hole_detail", hole_pk)
     form = forms.TeeForm()
     return render(request, "dashboard/create_tee.html", {"form": form})
@@ -93,6 +96,7 @@ def create_player(request):
         form = forms.PlayerForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.INFO, "Player Created.")
             return redirect("dashboard:players")
     else:
         form = forms.PlayerForm()
@@ -105,6 +109,7 @@ def edit_player(request, pk):
         form = forms.PlayerForm(request.POST, instance=player_data)
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.INFO, "Player Saved.")
             return redirect("dashboard:player_detail", pk)
     else:
         form = forms.PlayerForm(instance=player_data)

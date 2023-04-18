@@ -214,6 +214,11 @@
                     </div>
                 </div>
                 <div class="container">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% include 'dashboard/fragments/alert_success.html' %}
+                        {% endfor %}
+                    {% endif %}
                     {% block content %}{% endblock %}
                 </div>
             </main>
