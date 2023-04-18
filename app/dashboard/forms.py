@@ -51,3 +51,21 @@ class TeeForm(forms.ModelForm):
     class Meta:
         model = home_models.Tee
         fields = ["name", "distance"]
+
+
+class PlayerForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                "Create a new Player",
+                "name",
+                "user_account",
+            ),
+            Submit("submit", "Submit", css_class="btn btn-primary btn-sm"),
+        )
+
+    class Meta:
+        model = home_models.Player
+        fields = ["name", "user_account"]
