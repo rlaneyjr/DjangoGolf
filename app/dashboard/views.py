@@ -97,3 +97,15 @@ def create_player(request):
     else:
         form = forms.PlayerForm()
     return render(request, "dashboard/create_player.html", {"form": form})
+
+
+def edit_player(request, pk):
+    player_data = get_object_or_404(home_models.Player, pk=pk)
+    if request.method == "POST":
+        form = forms.PlayerForm(request.POST, instance=player_data)
+        if form.is_valid():
+            form.save()
+            return redirect("dashboard:player_detail", pk)
+    else:
+        form = forms.PlayerForm(instance=player_data)
+    return render(request, "dashboard/create_player.html", {"form": form})
