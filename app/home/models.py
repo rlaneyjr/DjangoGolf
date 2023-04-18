@@ -15,3 +15,9 @@ class GolfCourse(models.Model):
     city = models.CharField(max_length=128, blank=True)
     state = models.CharField(max_length=128, blank=True)
     zip_code = models.CharField(max_length=128, blank=True)
+
+
+class Hole(models.Model):
+    name = models.CharField(max_length=64)
+    nickname = models.CharField(max_length=128, blank=True)
+    course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
