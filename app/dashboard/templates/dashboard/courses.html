@@ -3,7 +3,7 @@
 {% block page_name %}Courses{% endblock %}
 
 {% block button_bar %}
-    <a href="#" class="btn btn-sm btn-outline-secondary">Add Course</a>
+    <a href="{% url 'dashboard:add_course' %}" class="btn btn-sm btn-outline-secondary">Add Course</a>
 {% endblock %}
 
 {% block content %}
