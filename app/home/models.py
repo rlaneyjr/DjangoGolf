@@ -27,3 +27,15 @@ class Tee(models.Model):
     name = models.CharField(max_length=64)
     distance = models.CharField(max_length=10)
     hole = models.ForeignKey(Hole, on_delete=models.CASCADE)
+
+
+class Game(models.Model):
+    HOLE_CHOICES = (
+        ("9", "9 Holes"),
+        ("18", "18 Holes"),
+    )
+    date_played = models.DateTimeField()
+    course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
+    holes_played = models.CharField(
+        max_length=64, choices=HOLE_CHOICES, default=HOLE_CHOICES[0][0]
+    )
