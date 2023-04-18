@@ -81,3 +81,8 @@ def game_detail(request, pk):
 def player_list(request):
     player_list = home_models.Player.objects.all()
     return render(request, "dashboard/players.html", {"player_list": player_list})
+
+
+def player_detail(request, pk):
+    player_data = get_object_or_404(home_models.Player, pk=pk)
+    return render(request, "dashboard/player_detail.html", {"player_data": player_data})
