@@ -1,7 +1,7 @@
 {% extends "base-dashboard.html" %}
 
 {% block button_bar %}
-    <a href="#" class="btn btn-sm btn-outline-secondary">Add Player</a>
+    <a href="{% url 'dashboard:create_player' %}" class="btn btn-sm btn-outline-secondary">Add Player</a>
 {% endblock %}
 
 {% block content %}

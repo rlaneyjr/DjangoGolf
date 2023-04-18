@@ -86,3 +86,14 @@ def player_list(request):
 def player_detail(request, pk):
     player_data = get_object_or_404(home_models.Player, pk=pk)
     return render(request, "dashboard/player_detail.html", {"player_data": player_data})
+
+
+def create_player(request):
+    if request.method == "POST":
+        form = forms.PlayerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("dashboard:players")
+    else:
+        form = forms.PlayerForm()
+    return render(request, "dashboard/create_player.html", {"form": form})
