@@ -16,4 +16,10 @@ urlpatterns = [
     path("players/<int:pk>/", views.player_detail, name="player_detail"),
     path("players/add/", views.create_player, name="create_player"),
     path("players/<int:pk>/edit/", views.edit_player, name="edit_player"),
+    # ajax
+    path(
+        "ajax/add-player-to-game/",
+        views.ajax_add_player_to_game,
+        name="ajax_add_player_to_game",
+    ),
 ]

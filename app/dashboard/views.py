@@ -1,5 +1,7 @@
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.http import JsonResponse, HttpResponseBadRequest
 from home import models as home_models
 from . import forms
 from . import utils
@@ -78,7 +80,12 @@ def game_list(request):
 
 def game_detail(request, pk):
     game_data = get_object_or_404(home_models.Game, pk=pk)
-    return render(request, "dashboard/game_detail.html", {"game_data": game_data})
+    player_list = home_models.Player.objects.all().exclude(game__in=[game_data.id])
+    return render(
+        request,
+        "dashboard/game_detail.html",
+        {"game_data": game_data, "player_list": player_list},
+    )
 
 
 def player_list(request):
@@ -114,3 +121,19 @@ def edit_player(request, pk):
     else:
         form = forms.PlayerForm(instance=player_data)
     return render(request, "dashboard/create_player.html", {"form": form})
+
+
+def ajax_add_player_to_game(request):
+    data = json.loads(request.body)
+    if not all([data["playerId"], data["game"]]):
+        return HttpResponseBadRequest("Missing Data")
+    game_data = home_models.Game.objects.filter(pk=data["game"]).first()
+    player_data = home_models.Player.objects.filter(pk=data["playerId"]).first()
+    if not all([game_data, player_data]):
+        return HttpResponseBadRequest("Unable to find either game or player")
+
+    if player_data in game_data.players.all():
+        return HttpResponseBadRequest("Player already part of game")
+
+    game_data.players.add(player_data)
+    return JsonResponse({"status": "success"})

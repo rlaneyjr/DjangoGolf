@@ -18,16 +18,55 @@
                 Players
             </div>
             <div class="card-body">
-                {% if player_list %}
-                    {% for player in player_list %}
-                    
-                    {% endfor %}
+                {% if game_data.players.all %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">&nbsp;</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody class="align-middle">
+                        {% for player in game_data.players.all %}
+                            <tr>
+                                <td><button type="button" class="btn btn-danger btn-sm">Remove</button></td>
+                                <td>{{player.name}}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 {% else %}
                     <p class="card-text">No Players Found</p>
                 {% endif %}
             </div>
             <div class="card-footer">
-                <a href="#" class="btn btn-primary btn-sm">Add Player</a>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">Add Player</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add-player-modal" tabindex="-1" aria-labelledby="add-player-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-player-modal-label">Add player to game</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label class="form-label">Player:</label>
+                    <select id="add-player-select" class="form-select">
+                        <option value="none">Select a player...</option>
+                        {% for player in player_list %}
+                            <option value="{{player.id}}">{{player.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="add-player-button">Add</button>
             </div>
         </div>
     </div>
@@ -36,4 +75,43 @@
 
 {% block page_styles %}{% endblock %}
 
-{% block page_scripts %}{% endblock %}
+{% block page_scripts %}
+<script>
+    const gameId = "{{game_data.id}}";
+    const addPlayerUrl = "{% url 'dashboard:ajax_add_player_to_game' %}";
+    const csrfToken = "{{csrf_token}}";
+
+    document.getElementById("add-player-button").addEventListener("click", async (event) => {
+        const playerId = document.getElementById("add-player-select").value;
+        if (playerId == "none") {
+            return;
+        }
+
+        const data = {
+            playerId: document.getElementById("add-player-select").value,
+            game: gameId
+        }
+
+        try {
+            const response = await fetch(addPlayerUrl, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                throw new Error("Error sending request");
+                return;
+            }
+            const jsonData = await response.json();
+            if (jsonData.status === "success") {
+                return window.location.reload(true);
+            }
+        } catch(e) {
+            alert("Error: " + e.message);
+        }
+    });
+</script>
+{% endblock %}
