@@ -90,11 +90,23 @@ def game_list(request):
 @login_required
 def game_detail(request, pk):
     game_data = get_object_or_404(home_models.Game, pk=pk)
+    current_player_count = game_data.players.count()
     player_list = home_models.Player.objects.all().exclude(game__in=[game_data.id])
+    hole_list = []
+    hole_count = 9
+    if game_data.holes_played == "18":
+        hole_count = 18
+    for hole_num in range(1, hole_count + 1):
+        hole_list.append(f"{hole_num}")
     return render(
         request,
         "dashboard/game_detail.html",
-        {"game_data": game_data, "player_list": player_list},
+        {
+            "game_data": game_data,
+            "player_list": player_list,
+            "current_player_count": current_player_count,
+            "hole_list": hole_list,
+        },
     )
 
 
@@ -173,13 +185,26 @@ def ajax_manage_players_for_game(request):
 @login_required
 def ajax_manage_game(request):
     data = json.loads(request.body)
+    game_id = data["gameId"]
+    game_data = home_models.Game.objects.filter(pk=game_id).first()
+    if game_data is None:
+        return HttpResponseBadRequest("Cannot find game with that id")
     if data["action"] == "delete-game":
-        game_id = data["gameId"]
-        game_data = home_models.Game.objects.filter(pk=game_id).first()
-        if game_data is None:
-            return HttpResponseBadRequest("Cannot find game with that id")
-
         game_data.delete()
         messages.add_message(request, messages.INFO, "Game Deleted.")
+        return JsonResponse({"status": "success"})
+    elif data["action"] == "start-game":
+        game_data.status = "active"
+        game_data.save()
+
+        hole_list = home_models.Hole.objects.filter(course=game_data.course)
+        for hole in hole_list:
+            for player in game_data.players.all():
+                game_link = home_models.PlayerGameLink.objects.filter(
+                    player=player, game=game_data
+                ).first()
+                hole_score = home_models.HoleScore(hole=hole, game=game_link)
+                hole_score.save()
+        messages.add_message(request, messages.INFO, "Game Started.")
         return JsonResponse({"status": "success"})
     return HttpResponseBadRequest("Unknown Action")

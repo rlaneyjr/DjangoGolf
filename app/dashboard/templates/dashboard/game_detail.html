@@ -22,12 +22,19 @@
                     <label class="form-label fw-bold">Date Played:</label>
                     {{game_data.date_played}}
                 </div>
-                <div>
+                <div class="mb-3">
                     <label class="form-label fw-bold">Holes:</label>
                     {{game_data.holes_played}}
                 </div>
+                <div>
+                    <label class="form-label fw-bold">Current Status:</label>
+                    {{game_data.get_status_display}}
+                </div>
             </div>
             <div class="card-footer">
+                {% if game_data.status == "setup" and current_player_count > 0 %}
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-modal">Start Game</button>
+                {% endif %}
                 <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete-game-modal">Delete Game</button>
             </div>
         </div>
@@ -65,6 +72,43 @@
         </div>
     </div>
 </div>
+
+{% if game_data.status == "active" %}
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                Game Scores
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            {% for hole_num in hole_list %}
+                                <th>{{hole_num}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in game_data.players.all %}
+                            <tr>
+                                <td>{{player.name}}</td>
+                                {% for hole_num in hole_list %}
+                                    <td><input type="text" size="1" /></td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+        
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <div class="modal fade" id="add-player-modal" tabindex="-1" aria-labelledby="add-player-modal-label" aria-hidden="true">
     <div class="modal-dialog">
@@ -127,6 +171,25 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="start-game-modal" tabindex="-1" aria-labelledby="start-game-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="start-game-modal-label">Confirm Start Game</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to start the game?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="start-game-button">Start Game</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block page_styles %}{% endblock %}
@@ -235,12 +298,41 @@
                 return;
             }
             const jsonData = await response.json();
-            
+
             if (jsonData.status === "success") {
                 return window.location.replace(gameListUrl);
             }
         } catch(e) {
+            console.log("Error: ", e.message)
+        }
+    });
 
+
+    document.getElementById("start-game-button").addEventListener("click", async (event) => {
+        const data = {
+            gameId: gameId,
+            action: "start-game"
+        }
+        try {
+            const response = await fetch(manageGameUrl, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                throw new Error("Error sending request");
+                return;
+            }
+            const jsonData = await response.json();
+
+            if (jsonData.status === "success") {
+                return window.location.reload(true);
+            }
+        } catch(e) {
+            console.log("Error: ", e.message)
         }
     });
 </script>
