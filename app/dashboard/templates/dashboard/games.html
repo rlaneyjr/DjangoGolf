@@ -3,7 +3,7 @@
 {% block page_name %}Games{% endblock %}
 
 {% block button_bar %}
-    <a href="#" class="btn btn-sm btn-outline-secondary">Add Game</a>
+    <a href="{% url 'dashboard:create_game' %}" class="btn btn-sm btn-outline-secondary">Add Game</a>
 {% endblock %}
 
 {% block content %}

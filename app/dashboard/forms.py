@@ -69,3 +69,20 @@ class PlayerForm(forms.ModelForm):
     class Meta:
         model = home_models.Player
         fields = ["name", "user_account"]
+
+
+class GameForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                "Create a new Game",
+                "course",
+            ),
+            Submit("submit", "Submit", css_class="btn btn-primary btn-sm"),
+        )
+
+    class Meta:
+        model = home_models.Game
+        fields = ["course"]

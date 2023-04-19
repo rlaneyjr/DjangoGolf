@@ -12,6 +12,7 @@ urlpatterns = [
     path("tees/<int:hole_pk>/", views.create_tee, name="create_tee"),
     path("games/", views.game_list, name="games"),
     path("games/<int:pk>/", views.game_detail, name="game_detail"),
+    path("games/add/", views.create_game, name="create_game"),
     path("players/", views.player_list, name="players"),
     path("players/<int:pk>/", views.player_detail, name="player_detail"),
     path("players/add/", views.create_player, name="create_player"),

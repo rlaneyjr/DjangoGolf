@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from home import models as home_models
 from . import forms
 from . import utils
@@ -134,6 +135,20 @@ def edit_player(request, pk):
     else:
         form = forms.PlayerForm(instance=player_data)
     return render(request, "dashboard/create_player.html", {"form": form})
+
+
+@login_required
+def create_game(request):
+    if request.method == "POST":
+        form = forms.GameForm(request.POST)
+        if form.is_valid():
+            game = form.save(commit=False)
+            game.date_played = timezone.now()
+            game.save()
+            return redirect("dashboard:game_detail", game.id)
+    else:
+        form = forms.GameForm()
+    return render(request, "dashboard/create_game.html", {"form": form})
 
 
 @login_required
