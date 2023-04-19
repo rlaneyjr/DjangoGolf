@@ -92,7 +92,31 @@ def game_detail(request, pk):
     game_data = get_object_or_404(home_models.Game, pk=pk)
     current_player_count = game_data.players.count()
     player_list = home_models.Player.objects.all().exclude(game__in=[game_data.id])
+    hole_data = {}
     hole_list = []
+
+    for player in game_data.players.all():
+        hole_data[player.id] = {
+            "player_name": player.name,
+            "hole_list": [],
+            "total_score": 0,
+            "par": 0,
+        }
+        player_game_link = home_models.PlayerGameLink.objects.filter(
+            game=game_data, player=player
+        ).first()
+        hole_score_list = home_models.HoleScore.objects.filter(game=player_game_link)
+        for hole_item in hole_score_list:
+            hole_data[player.id]["hole_list"].append(
+                {
+                    "hole_score_id": hole_item.id,
+                    "hole_score": hole_item.score,
+                    "hole_name": hole_item.hole.name,
+                }
+            )
+            hole_data[player.id]["total_score"] += hole_item.score
+            hole_data[player.id]["par"] += hole_item.hole.par
+
     hole_count = 9
     if game_data.holes_played == "18":
         hole_count = 18
@@ -105,6 +129,7 @@ def game_detail(request, pk):
             "game_data": game_data,
             "player_list": player_list,
             "current_player_count": current_player_count,
+            "hole_data": hole_data,
             "hole_list": hole_list,
         },
     )
@@ -208,3 +233,18 @@ def ajax_manage_game(request):
         messages.add_message(request, messages.INFO, "Game Started.")
         return JsonResponse({"status": "success"})
     return HttpResponseBadRequest("Unknown Action")
+
+
+@login_required
+def ajax_record_score_for_hole(request):
+    data = json.loads(request.body)
+
+    hole_score_id = data["hole_score_id"]
+    hole_score_val = data["hole_score"]
+
+    hole_score = home_models.HoleScore.objects.filter(pk=hole_score_id).first()
+
+    hole_score.score = hole_score_val
+    hole_score.save()
+
+    return JsonResponse({"status": "success"})

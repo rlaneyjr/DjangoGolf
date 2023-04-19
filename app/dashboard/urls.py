@@ -24,4 +24,9 @@ urlpatterns = [
         name="ajax_manage_players_for_game",
     ),
     path("ajax/manage-game/", views.ajax_manage_game, name="ajax_manage_game"),
+    path(
+        "ajax/record-score-for-hole/",
+        views.ajax_record_score_for_hole,
+        name="ajax_record_score_for_hole",
+    ),
 ]

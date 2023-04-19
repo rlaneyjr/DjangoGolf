@@ -49,14 +49,19 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th style="width: 5%;">&nbsp;</th>
+                                {% if game_data.status == "setup" %}
+                                    <th style="width: 5%;">&nbsp;</th>
+                                {% endif %}
                                 <th>Name</th>
+
                             </tr>
                         </thead>
                         <tbody class="align-middle">
                         {% for player in game_data.players.all %}
                             <tr>
-                                <td><button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#remove-player-modal" data-player-id="{{player.id}}">Remove</button></td>
+                                {% if game_data.status == "setup" %}
+                                    <td><button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#remove-player-modal" data-player-id="{{player.id}}">Remove</button></td>
+                                {% endif %}
                                 <td>{{player.name}}</td>
                             </tr>
                         {% endfor %}
@@ -66,9 +71,11 @@
                     <p class="card-text">No Players Found</p>
                 {% endif %}
             </div>
-            <div class="card-footer">
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">Add Player</button>
-            </div>
+            {% if game_data.status == "setup" %}
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">Add Player</button>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -88,15 +95,17 @@
                             {% for hole_num in hole_list %}
                                 <th>{{hole_num}}</th>
                             {% endfor %}
+                            <th>Score</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for player in game_data.players.all %}
-                            <tr>
-                                <td>{{player.name}}</td>
-                                {% for hole_num in hole_list %}
-                                    <td><input type="text" size="1" /></td>
+                        {% for player_id, hole_obj in hole_data.items %}
+                            <tr class="player-row" data-row-player-id="{{player_id}}">
+                                <td>{{hole_obj.player_name}}</td>
+                                {% for hole_item in hole_obj.hole_list %}
+                                    <td><input type="text" size="1" class="hole-input" data-player-id="{{player_id}}" data-hole-score-id="{{hole_item.hole_score_id}}" value={{hole_item.hole_score}} /></td>
                                 {% endfor %}
+                                <td>{{hole_obj.total_score}}/{{hole_obj.par}}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -189,7 +198,6 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block page_styles %}{% endblock %}
@@ -200,6 +208,8 @@
     const managePlayerUrl = "{% url 'dashboard:ajax_manage_players_for_game' %}";
     const manageGameUrl = "{% url 'dashboard:ajax_manage_game' %}";
     const gameListUrl = "{% url 'dashboard:games' %}";
+    const recordScoreUrl = "{% url 'dashboard:ajax_record_score_for_hole' %}";
+
     const csrfToken = "{{csrf_token}}";
     let removePlayerId = null;
 
@@ -335,5 +345,39 @@
             console.log("Error: ", e.message)
         }
     });
+
+    document.querySelectorAll(".hole-input").forEach((el) => {
+        el.addEventListener("blur", async (event) => {
+            const playerId = event.target.dataset.playerId;
+            const holeScoreId = event.target.dataset.holeScoreId;
+            const data = {
+                hole_score_id: holeScoreId,
+                hole_score: event.target.value
+            }
+
+            try {
+                const response = await fetch(recordScoreUrl, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error("Error sending request");
+                    return;
+                }
+                const jsonData = await response.json();
+                if (jsonData.status === "success") {
+                    console.log("Worked")
+                }
+            } catch(e) {
+                console.log("Error: ", e.message)
+            }
+
+        });
+    })
 </script>
 {% endblock %}
