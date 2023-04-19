@@ -39,10 +39,18 @@ class Game(models.Model):
         ("9", "9 Holes"),
         ("18", "18 Holes"),
     )
+    STATUS_CHOICES = (
+        ("setup", "Setup"),
+        ("active", "Active"),
+        ("completed", "Completed"),
+    )
     date_played = models.DateTimeField()
     course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
     holes_played = models.CharField(
         max_length=64, choices=HOLE_CHOICES, default=HOLE_CHOICES[0][0]
+    )
+    status = models.CharField(
+        max_length=64, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0]
     )
     players = models.ManyToManyField("Player", through="PlayerGameLink")
 
