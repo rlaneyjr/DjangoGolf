@@ -153,3 +153,18 @@ def ajax_manage_players_for_game(request):
     elif data["action"] == "remove-player":
         game_data.players.remove(player_data)
     return JsonResponse({"status": "success"})
+
+
+@login_required
+def ajax_manage_game(request):
+    data = json.loads(request.body)
+    if data["action"] == "delete-game":
+        game_id = data["gameId"]
+        game_data = home_models.Game.objects.filter(pk=game_id).first()
+        if game_data is None:
+            return HttpResponseBadRequest("Cannot find game with that id")
+
+        game_data.delete()
+        messages.add_message(request, messages.INFO, "Game Deleted.")
+        return JsonResponse({"status": "success"})
+    return HttpResponseBadRequest("Unknown Action")

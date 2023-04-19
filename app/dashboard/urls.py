@@ -22,4 +22,5 @@ urlpatterns = [
         views.ajax_manage_players_for_game,
         name="ajax_manage_players_for_game",
     ),
+    path("ajax/manage-game/", views.ajax_manage_game, name="ajax_manage_game"),
 ]
