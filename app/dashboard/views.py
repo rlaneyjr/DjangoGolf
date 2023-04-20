@@ -56,7 +56,7 @@ def edit_course(request, pk):
 def course_detail(request, pk):
     course_data = get_object_or_404(home_models.GolfCourse, pk=pk)
     course_location = None
-    hole_list = home_models.Hole.objects.filter(course=course_data).order_by("name")
+    hole_list = home_models.Hole.objects.filter(course=course_data).order_by("order")
     if all([course_data.city, course_data.state, course_data.zip_code]):
         course_location = (
             f"{course_data.city}, {course_data.state}, {course_data.zip_code}"
