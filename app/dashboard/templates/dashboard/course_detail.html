@@ -23,7 +23,7 @@
                 <div class="mb-3">
                     <label class="fw-bold d-block">Tee Time Link:</label>
                     {% if course_data.tee_time_link %}
-                        <span class="ps-2"><a href="#">{{course_data.tee_time_link }}</a></span>
+                        <span class="ps-2"><a href="{{course_data.tee_time_link}}">Link</a></span>
                     {% else %}
                         <p class="ps-2">Not Found</p>
                     {% endif %}
@@ -31,7 +31,7 @@
                 <div class="mb-3">
                     <label class="fw-bold d-block">Website:</label>
                     {% if course_data.website_link %}
-                        <span class="ps-2"><a href="{{course_data.website_link}}" target="new_page">{{course_data.website_link }}</a></span>
+                        <span class="ps-2"><a href="{{course_data.website_link}}" target="new_page">Link</a></span>
                     {% else %}
                         <p class="ps-2">Not Found</p>
                     {% endif %}
