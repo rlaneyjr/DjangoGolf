@@ -35,6 +35,35 @@ class GolfCourseForm(forms.ModelForm):
         ]
 
 
+class EditGolfCourseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                "Edit course",
+                "name",
+                "tee_time_link",
+                "website_link",
+                "city",
+                "state",
+                "zip_code",
+            ),
+            Submit("submit", "Submit", css_class="btn btn-primary btn-sm"),
+        )
+
+    class Meta:
+        model = home_models.GolfCourse
+        fields = [
+            "name",
+            "tee_time_link",
+            "website_link",
+            "city",
+            "state",
+            "zip_code",
+        ]
+
+
 class TeeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
