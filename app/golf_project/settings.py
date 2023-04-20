@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ["golf.joshbright.com", "127.0.0.1"]
-
+CSRF_TRUSTED_ORIGINS = ["https://golf.joshbright.com"]
 
 # Application definition
 
