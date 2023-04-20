@@ -35,6 +35,24 @@ def create_course(request):
 
 
 @login_required
+def edit_course(request, pk):
+    course_data = get_object_or_404(home_models.GolfCourse, pk=pk)
+    if request.method == "POST":
+        form = forms.EditGolfCourseForm(request.POST, instance=course_data)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.INFO, "Course updated.")
+            return redirect("dashboard:course_detail", pk)
+    else:
+        form = forms.EditGolfCourseForm(instance=course_data)
+    return render(
+        request,
+        "dashboard/edit_course.html",
+        {"form": form, "course_data": course_data},
+    )
+
+
+@login_required
 def course_detail(request, pk):
     course_data = get_object_or_404(home_models.GolfCourse, pk=pk)
     course_location = None
