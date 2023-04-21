@@ -44,7 +44,7 @@ def game_detail(request, pk):
             course=game_data.course, order=hole_num
         ).first()
         game_links = models.PlayerGameLink.objects.filter(
-            player__in=game_data.players.all()
+            player__in=game_data.players.all(), game=game_data
         )
         next_hole = models.Hole.objects.filter(
             course=game_data.course, order=hole_num + 1
