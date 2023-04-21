@@ -24,3 +24,7 @@ def course_detail(request, pk):
 def view_my_games(request):
     game_list = models.Game.objects.filter(players__in=[request.user.player])
     return render(request, "home/view_my_games.html", {"game_list": game_list})
+
+
+def my_profile(request):
+    return render(request, "home/profile.html", {})

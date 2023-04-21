@@ -25,13 +25,7 @@
                             </li>
                             {% if request.user.is_authenticated %}
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Games</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Players</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Profile</a>
+                                    <a class="nav-link {% if '/profile/' in request.path %}active{% endif %}" href="{% url 'home:profile' %}">Profile</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
