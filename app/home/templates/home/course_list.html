@@ -13,7 +13,7 @@
         <tbody class="align-middle">
             {% for course in course_list %}
                 <tr>
-                    <td><a class="btn btn-primary btn-sm" href="#">View</a></td>
+                    <td><a class="btn btn-primary btn-sm" href="{% url 'home:course-detail' course.id %}">View</a></td>
                     <td>{{course.name}}</td>
                 </tr>
             {% endfor %}

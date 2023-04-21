@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from home import models
 
 
@@ -14,3 +14,8 @@ def index(request):
 def course_list(request):
     course_list = models.GolfCourse.objects.all().order_by("name")
     return render(request, "home/course_list.html", {"course_list": course_list})
+
+
+def course_detail(request, pk):
+    course_data = get_object_or_404(models.GolfCourse, pk=pk)
+    return render(request, "home/course_detail.html", {"course_data": course_data})
