@@ -20,11 +20,24 @@
                     <div class="fw-bold">Date Played:</div>
                     <div class="ps-3">{{game_data.date_played}}</div>
                 </div>
+                <hr />
                 <div class="mb-3">
-                    <div class="fw-bold">Players:</div>
-                    {% for player in game_data.players.all %}
-                        <div class="ps-3">{{player.name}}</div>
-                    {% endfor %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for player in game_data.players.all %}
+                            <tr>
+                                <td>{{player.name}}</td>
+                                <td>0</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             {% if game_data.status == "setup" %}
