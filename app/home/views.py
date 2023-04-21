@@ -1,4 +1,6 @@
+import json
 from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
 from home import models
 
 
@@ -72,3 +74,24 @@ def view_my_games(request):
 def my_profile(request):
     game_count = models.Game.objects.filter(players__in=[request.user.player]).count()
     return render(request, "home/profile.html", {"game_count": game_count})
+
+
+def ajax_record_hole_score(request):
+    data = json.loads(request.body)
+    game_id = data["game_id"]
+    game_data = models.Game.objects.filter(pk=game_id).first()
+    if game_data is None:
+        return JsonResponse({"status": "failed"})
+
+    if game_data.status != "active":
+        return JsonResponse({"status": "failed"})
+
+    score_list = data["scores"]
+    for score in score_list:
+        hole_score = models.HoleScore.objects.filter(pk=score["score_id"]).first()
+        if hole_score is None:
+            return JsonResponse({"status": "failed"})
+        hole_score.score = score["score"]
+        hole_score.save()
+
+    return JsonResponse({"status": "success"})

@@ -31,17 +31,20 @@
     </div>
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
-                Scores: Hole {{current_hole.order}}
+            <div class="card-header d-flex justify-content-between">
+                <span class="pt-1">Scores: Hole {{current_hole.order}}</span>
+                <button class="btn btn-outline-primary btn-sm" id="save-hole-scores">Save</button>
             </div>
             <div class="card-body">
                 <table class="table">
+                    <tbody class="align-middle">
                     {% for hole in hole_scores %}
                         <tr>
                             <td>{{hole.player}}</td>
-                            <td><input type="number" min-value=1, max-value=8 class="form-control" size=1 value="{{hole.score}}" /></td>
+                            <td><input type="number" min-value=1, max-value=8 class="form-control hole-score" size=1 value="{{hole.score}}" data-hole-score-id="{{hole.hole_score_id}}" /></td>
                         </tr>
                     {% endfor %}
+                    </tbody>
                 </table>
             </div>
             <div class="card-footer d-flex justify-content-between">
@@ -62,6 +65,50 @@
 </div>
 {% endblock %}
 
-{% block page_styles %}{% endblock %}
+{% block page_styles %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+{% endblock %}
 
-{% block page_scripts %}{% endblock %}
+{% block page_scripts %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+    const scoreUrl = "{% url 'home:ajax-record-hole-score' %}";
+    const csrfToken = "{{csrf_token}}";
+    const gameId = "{{game_data.id}}";
+
+    document.getElementById("save-hole-scores").addEventListener("click", async (event) => {
+        const data = {"scores": [], "game_id": gameId};
+        document.querySelectorAll(".hole-score").forEach((el) => {
+            const holeScore = {
+                "score_id": el.dataset.holeScoreId,
+                "score": el.value
+            }
+            data.scores.push(holeScore);
+        });
+
+        const response = await fetch(scoreUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            console.log("Error");
+            return;
+        }
+
+        const jsonData = await response.json();
+
+        Toastify({
+            text: "Scores Saved",
+            duration: 2000,
+            gravity: "bottom", // `top` or `bottom`
+            position: "center", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+        }).showToast();
+    })
+</script>
+{% endblock %}
