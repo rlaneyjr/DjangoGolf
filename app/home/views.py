@@ -21,6 +21,49 @@ def course_detail(request, pk):
     return render(request, "home/course_detail.html", {"course_data": course_data})
 
 
+def game_detail(request, pk):
+    hole_num = int(request.GET.get("hole", 1))
+    game_data = get_object_or_404(models.Game, pk=pk)
+    hole_data = models.Hole.objects.filter(
+        course=game_data.course, order=hole_num
+    ).first()
+    game_links = models.PlayerGameLink.objects.filter(
+        player__in=game_data.players.all()
+    )
+    next_hole = models.Hole.objects.filter(
+        course=game_data.course, order=hole_num + 1
+    ).first()
+    prev_hole = models.Hole.objects.filter(
+        course=game_data.course, order=hole_num - 1
+    ).first()
+
+    hole_scores = []
+
+    for game_link in game_links:
+        hole_score = models.HoleScore.objects.filter(
+            hole=hole_data, game=game_link
+        ).first()
+        hole_scores.append(
+            {
+                "player": game_link.player.name,
+                "hole_score_id": hole_score.id,
+                "score": hole_score.score,
+            }
+        )
+
+    return render(
+        request,
+        "home/game_detail.html",
+        {
+            "game_data": game_data,
+            "hole_scores": hole_scores,
+            "current_hole": hole_data,
+            "next_hole": next_hole,
+            "prev_hole": prev_hole,
+        },
+    )
+
+
 def view_my_games(request):
     game_list = models.Game.objects.filter(players__in=[request.user.player])
     return render(request, "home/view_my_games.html", {"game_list": game_list})

@@ -13,7 +13,7 @@
                     {% if game_list %}
                         <ul class="list-group">
                         {% for game in game_list %}
-                            <li class="list-group-item"><a class="text-decoration-none text-black" href="#">{{game.course}}: {{game.date_played}}</a></li>
+                            <li class="list-group-item"><a class="text-decoration-none text-black" href="{% url 'home:game-detail' game.id %}">{{game.course}}: {{game.date_played}}</a></li>
                         {% endfor %}
                         </ul>
                     {% else %}
