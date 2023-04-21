@@ -124,7 +124,10 @@ def ajax_create_game(request):
     game = models.Game.objects.create(course=course_data, date_played=timezone.now())
     game.players.add(request.user.player)
     return JsonResponse(
-        {"status": "success", "game_url": reverse("home:game-detail", args=[game.id])}
+        {
+            "status": "success",
+            "game_url": settings.BASE_URL + reverse("home:game-detail", args=[game.id]),
+        }
     )
 
 

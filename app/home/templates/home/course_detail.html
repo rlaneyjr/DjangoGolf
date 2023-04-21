@@ -92,11 +92,11 @@
         if (!response.ok) {
             console.log("Problem")
         }
-        const jsonData = response.json();
-        if (jsonData.status == "success") {
-            window.location.href = jsonData.game_url;
+        const jsonData = await response.json();
+        if (jsonData.status === "success") {
+            window.location.replace(jsonData.game_url);
         } else {
-            console.log("jsonData");
+            console.log(jsonData);
         }
     });
 </script>
