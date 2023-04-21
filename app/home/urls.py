@@ -15,4 +15,10 @@ urlpatterns = [
         views.ajax_record_hole_score,
         name="ajax-record-hole-score",
     ),
+    path("ajax/create-game/", views.ajax_create_game, name="ajax-create-game"),
+    path(
+        "ajax/add-player-to-game",
+        views.ajax_add_player_to_game,
+        name="ajax-add-player-to-game",
+    ),
 ]

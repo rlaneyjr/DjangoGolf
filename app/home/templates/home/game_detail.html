@@ -27,8 +27,16 @@
                     {% endfor %}
                 </div>
             </div>
+            {% if game_data.status == "setup" %}
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">
+                        Add Player
+                    </button>
+                </div>
+            {% endif %}
         </div>
     </div>
+    {% if game_data.status != "setup" %}
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
@@ -62,6 +70,30 @@
             </div>
         </div>
     </div>
+    {% endif %}
+</div>
+
+<div class="modal fade" id="add-player-modal" tabindex="-1" aria-labelledby="add-player-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-player-modal-label">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <select class="form-select" id="player-select">
+                    <option value="none">Select a player...</option>
+                    {% for player in available_players %}
+                        <option value="{{player.id}}">{{player.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="add-player-button">Add Player</button>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -73,10 +105,11 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script>
     const scoreUrl = "{% url 'home:ajax-record-hole-score' %}";
+    const addPlayerUrl = "{% url 'home:ajax-add-player-to-game' %}";
     const csrfToken = "{{csrf_token}}";
     const gameId = "{{game_data.id}}";
 
-    document.getElementById("save-hole-scores").addEventListener("click", async (event) => {
+    document.getElementById("save-hole-scores")?.addEventListener("click", async (event) => {
         const data = {"scores": [], "game_id": gameId};
         document.querySelectorAll(".hole-score").forEach((el) => {
             const holeScore = {
@@ -109,6 +142,34 @@
             position: "center", // `left`, `center` or `right`
             stopOnFocus: true, // Prevents dismissing of toast on hover
         }).showToast();
+    });
+
+    document.getElementById("add-player-button").addEventListener("click", async () => {
+        const data = {
+            "game_id": gameId,
+            "player_id": document.getElementById("player-select").value
+        };
+
+        const response = await fetch(addPlayerUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            console.log("Error");
+            return;
+        }
+
+        const jsonData = await response.json();
+        if (jsonData.status == "success") {
+            window.location.reload(true);
+        } else {
+            console.log(jsonData);
+        }
     })
 </script>
 {% endblock %}

@@ -40,6 +40,29 @@
                     </div>
                 </div>
             </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#create-game-modal">
+                    Start Game
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="create-game-modal" tabindex="-1" aria-labelledby="create-game-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="create-game-modal-label">Are you sure?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to start a game at {{course_data.name}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirm-start-game-button">Confirm</button>
+            </div>
         </div>
     </div>
 </div>
@@ -48,4 +71,33 @@
 
 {% block page_styles %}{% endblock %}
 
-{% block page_scripts %}{% endblock %}
+{% block page_scripts %}
+<script>
+    const courseId = "{{course_data.id}}";
+    const createGameUrl = "{% url 'home:ajax-create-game' %}";
+    const csrfToken = "{{csrf_token}}";
+
+    document.getElementById("confirm-start-game-button").addEventListener("click", async (event) => {
+        const data = {
+            course_id: courseId
+        };
+        const response = await fetch(createGameUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+        if (!response.ok) {
+            console.log("Problem")
+        }
+        const jsonData = response.json();
+        if (jsonData.status == "success") {
+            window.location.href = jsonData.game_url;
+        } else {
+            console.log("jsonData");
+        }
+    });
+</script>
+{% endblock %}
