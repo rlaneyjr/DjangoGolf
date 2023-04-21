@@ -19,3 +19,8 @@ def course_list(request):
 def course_detail(request, pk):
     course_data = get_object_or_404(models.GolfCourse, pk=pk)
     return render(request, "home/course_detail.html", {"course_data": course_data})
+
+
+def view_my_games(request):
+    game_list = models.Game.objects.filter(players__in=[request.user.player])
+    return render(request, "home/view_my_games.html", {"game_list": game_list})
