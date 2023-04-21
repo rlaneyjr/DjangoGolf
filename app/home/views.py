@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.http import JsonResponse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from home import models
 
 
@@ -143,3 +144,29 @@ def ajax_add_player_to_game(request):
     game_data.players.add(player_data)
 
     return JsonResponse({"status": "success"})
+
+
+@login_required
+def ajax_manage_game(request):
+    data = json.loads(request.body)
+    game_id = data["game_id"]
+    action = data["action"]
+    if action == "start-game":
+        game_data = models.Game.objects.filter(pk=game_id).first()
+        if game_data is None:
+            return JsonResponse({"status": "failed"})
+
+        game_data.status = "active"
+        game_data.save()
+
+        hole_list = models.Hole.objects.filter(course=game_data.course)
+        for hole in hole_list:
+            for player in game_data.players.all():
+                game_link = models.PlayerGameLink.objects.filter(
+                    player=player, game=game_data
+                ).first()
+                hole_score = models.HoleScore(hole=hole, game=game_link)
+                hole_score.save()
+
+        return JsonResponse({"status": "success"})
+    return JsonResponse({"status": "failed"})

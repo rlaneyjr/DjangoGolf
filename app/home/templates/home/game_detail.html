@@ -32,6 +32,9 @@
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">
                         Add Player
                     </button>
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-modal">
+                        Start Game
+                    </button>
                 </div>
             {% endif %}
         </div>
@@ -95,6 +98,24 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="start-game-modal" tabindex="-1" aria-labelledby="start-game-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="example-modal-label">Confirm Start Game</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to start the game?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirm-start-game-button">Start Game</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block page_styles %}
@@ -106,6 +127,7 @@
 <script>
     const scoreUrl = "{% url 'home:ajax-record-hole-score' %}";
     const addPlayerUrl = "{% url 'home:ajax-add-player-to-game' %}";
+    const manageGameUrl = "{% url 'home:ajax-manage-game' %}";
     const csrfToken = "{{csrf_token}}";
     const gameId = "{{game_data.id}}";
 
@@ -170,6 +192,34 @@
         } else {
             console.log(jsonData);
         }
-    })
+    });
+
+    document.getElementById("confirm-start-game-button").addEventListener("click", async (event) => {
+        const data = {
+            "action": "start-game",
+            "game_id": gameId
+        };
+
+        const response = await fetch(manageGameUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            console.log("Error");
+            return;
+        }
+
+        const jsonData = await response.json();
+        if (jsonData.status == "success") {
+            window.location.reload(true);
+        } else {
+            console.log(jsonData);
+        }
+    });
 </script>
 {% endblock %}
