@@ -27,4 +27,5 @@ def view_my_games(request):
 
 
 def my_profile(request):
-    return render(request, "home/profile.html", {})
+    game_count = models.Game.objects.filter(players__in=[request.user.player]).count()
+    return render(request, "home/profile.html", {"game_count": game_count})
