@@ -143,7 +143,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 # Login stuff
-LOGIN_REDIRECT_URL = "/dashboard/"
+LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
 
 # Django Rest Framework Settings
