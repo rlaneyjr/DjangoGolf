@@ -30,10 +30,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                        {% for player in game_data.players.all %}
+                        {% for player_name, player_score in player_scores.items %}
                             <tr>
-                                <td>{{player.name}}</td>
-                                <td>0</td>
+                                <td>{{player_name}}</td>
+                                <td>{{player_score}}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
