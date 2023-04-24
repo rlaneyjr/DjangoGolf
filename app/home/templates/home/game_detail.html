@@ -57,7 +57,9 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between">
                 <span class="pt-1">Scores: Hole {{current_hole.order}}</span>
-                <button class="btn btn-outline-primary btn-sm" id="save-hole-scores">Save</button>
+                {% if game_data.status == "active" %}
+                    <button class="btn btn-outline-primary btn-sm" id="save-hole-scores">Save</button>
+                {% endif %}
             </div>
             <div class="card-body">
                 <table class="table">
@@ -65,7 +67,11 @@
                     {% for hole in hole_scores %}
                         <tr>
                             <td>{{hole.player}}</td>
-                            <td><input type="number" min-value=1, max-value=8 class="form-control hole-score" size=1 value="{{hole.score}}" data-hole-score-id="{{hole.hole_score_id}}" /></td>
+                            {% if game_data.status == "active" %}
+                                <td><input type="number" min-value=1, max-value=8 class="form-control hole-score" size=1 value="{{hole.score}}" data-hole-score-id="{{hole.hole_score_id}}" /></td>
+                            {% else %}
+                                <td>{{hole.score}}</td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>
