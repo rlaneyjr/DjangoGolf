@@ -40,6 +40,13 @@ def game_detail(request, pk):
     if game_data.status == "setup":
         available_players = models.Player.objects.all().exclude(game__in=[game_data.id])
 
+        game_links = models.PlayerGameLink.objects.filter(
+            player__in=game_data.players.all(), game=game_data
+        )
+        for game_link in game_links:
+            if game_link.player.name not in player_scores.keys():
+                player_scores[game_link.player.name] = 0
+
     if game_data.status in ["active", "completed"]:
         hole_data = models.Hole.objects.filter(
             course=game_data.course, order=hole_num
