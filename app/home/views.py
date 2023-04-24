@@ -35,6 +35,7 @@ def game_detail(request, pk):
     prev_hole = None
     hole_scores = []
     available_players = []
+    player_scores = {}
 
     if game_data.status == "setup":
         available_players = models.Player.objects.all().exclude(game__in=[game_data.id])
@@ -52,9 +53,6 @@ def game_detail(request, pk):
         prev_hole = models.Hole.objects.filter(
             course=game_data.course, order=hole_num - 1
         ).first()
-
-        hole_scores = []
-        player_scores = {}
 
         for game_link in game_links:
             hole_score = models.HoleScore.objects.filter(
