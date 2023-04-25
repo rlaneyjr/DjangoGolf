@@ -115,3 +115,9 @@ class GameForm(forms.ModelForm):
     class Meta:
         model = home_models.Game
         fields = ["course"]
+
+
+class HoleForm(forms.ModelForm):
+    class Meta:
+        model = home_models.Hole
+        fields = ["par"]
