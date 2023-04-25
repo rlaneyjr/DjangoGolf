@@ -96,6 +96,7 @@
     const holeId = "{{hole_data.id}}";
     const holeParUrl = "{% url 'dashboard:ajax-save-par-to-hole' %}";
     const csrfToken = "{{csrf_token}}";
+    const errorDiv = document.getElementById("par-error-message");
     document.getElementById("save-par-number").addEventListener("click", async (event) => {
         const parNum = document.getElementById("id_par").value;
         const data = {
@@ -112,13 +113,13 @@
             body: JSON.stringify(data)
         });
         if (!response.ok) {
-            console.log(response)
+            errorDiv.innerText = "Unknown error setting par value";
+            errorDiv.classList.remove("d-none");
         }
         const jsonData = await response.json();
         if (jsonData.status == "success") {
             window.location.reload(true);
         } else {
-            const errorDiv = document.getElementById("par-error-message");
             errorDiv.innerText = jsonData.message;
             errorDiv.classList.remove("d-none");
         }
