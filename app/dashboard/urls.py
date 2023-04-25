@@ -30,4 +30,7 @@ urlpatterns = [
         views.ajax_record_score_for_hole,
         name="ajax_record_score_for_hole",
     ),
+    path(
+        "ajax/save-par-to-hole/", views.save_par_to_hole, name="ajax-save-par-to-hole"
+    ),
 ]

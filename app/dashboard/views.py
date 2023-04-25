@@ -77,10 +77,16 @@ def hole_detail(request, pk):
     hole_data = get_object_or_404(home_models.Hole, pk=pk)
     tee_list = home_models.Tee.objects.filter(hole=hole_data)
     course_data = hole_data.course
+    form = forms.HoleForm(instance=hole_data)
     return render(
         request,
         "dashboard/hole_detail.html",
-        {"hole_data": hole_data, "course_data": course_data, "tee_list": tee_list},
+        {
+            "hole_data": hole_data,
+            "course_data": course_data,
+            "tee_list": tee_list,
+            "form": form,
+        },
     )
 
 
@@ -265,4 +271,30 @@ def ajax_record_score_for_hole(request):
     hole_score.score = hole_score_val
     hole_score.save()
 
+    return JsonResponse({"status": "success"})
+
+
+@login_required
+def save_par_to_hole(request):
+    data = json.loads(request.body)
+    hole_par = data["hole_par"]
+    hole_id = data["hole_id"]
+    hole_data = home_models.Hole.objects.filter(pk=hole_id).first()
+
+    # be sure we have a hole to deal with
+    if hole_data is None:
+        return JsonResponse(
+            {"status": "failed", "message": f"Unable to find hole with ID: {hole_id}"}
+        )
+
+    # be sure our par is a number
+    try:
+        hole_par = int(hole_par)
+    except ValueError:
+        return JsonResponse(
+            {"status": "failed", "message": "Par value does not appear to be a number"}
+        )
+
+    hole_data.par = hole_par
+    hole_data.save()
     return JsonResponse({"status": "success"})
