@@ -163,11 +163,12 @@ def ajax_manage_game(request):
     data = json.loads(request.body)
     game_id = data["game_id"]
     action = data["action"]
-    if action == "start-game":
-        game_data = models.Game.objects.filter(pk=game_id).first()
-        if game_data is None:
-            return JsonResponse({"status": "failed"})
 
+    game_data = models.Game.objects.filter(pk=game_id).first()
+    if game_data is None:
+        return JsonResponse({"status": "failed"})
+
+    if action == "start-game":
         game_data.status = "active"
         game_data.save()
 
@@ -180,5 +181,9 @@ def ajax_manage_game(request):
                 hole_score = models.HoleScore(hole=hole, game=game_link)
                 hole_score.save()
 
+        return JsonResponse({"status": "success"})
+    elif action == "complete-game":
+        game_data.status = "completed"
+        game_data.save()
         return JsonResponse({"status": "success"})
     return JsonResponse({"status": "failed"})

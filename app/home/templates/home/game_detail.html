@@ -49,6 +49,12 @@
                         Start Game
                     </button>
                 </div>
+            {% elif game_data.status == "active" %}
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#complete-game-modal">
+                        Complete Game
+                    </button>
+                </div>
             {% endif %}
         </div>
     </div>
@@ -131,6 +137,24 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="confirm-start-game-button">Start Game</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="complete-game-modal" tabindex="-1" aria-labelledby="complete-game-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="complete-game-modal-label">Complete Game?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to mark this game as completed?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirm-mark-game-completed-button">Yes</button>
             </div>
         </div>
     </div>
@@ -218,6 +242,36 @@
             "action": "start-game",
             "game_id": gameId
         };
+
+        const response = await fetch(manageGameUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            console.log("Error");
+            return;
+        }
+
+        const jsonData = await response.json();
+        if (jsonData.status == "success") {
+            window.location.reload(true);
+        } else {
+            console.log(jsonData);
+        }
+    });
+
+    document.getElementById("confirm-mark-game-completed-button").addEventListener("click", async (event) => {
+        console.log("clicked");
+
+        const data = {
+            "game_id": gameId,
+            "action": "complete-game"
+        }
 
         const response = await fetch(manageGameUrl, {
             method: "POST",
