@@ -9,6 +9,10 @@ from . import forms
 from . import utils
 
 
+def no_permission(request):
+    return render(request, "dashboard/no-permission.html", {})
+
+
 @login_required
 @user_passes_test(utils.is_admin)
 def index(request):
