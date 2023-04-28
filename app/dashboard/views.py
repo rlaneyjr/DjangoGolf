@@ -14,20 +14,26 @@ def no_permission(request):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def index(request):
     return render(request, "dashboard/index.html", {})
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def course_list(request):
     course_list = home_models.GolfCourse.objects.all()
     return render(request, "dashboard/courses.html", {"course_list": course_list})
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def create_course(request):
     if request.method == "POST":
         form = forms.GolfCourseForm(request.POST)
@@ -42,7 +48,9 @@ def create_course(request):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def edit_course(request, pk):
     course_data = get_object_or_404(home_models.GolfCourse, pk=pk)
     if request.method == "POST":
@@ -61,7 +69,9 @@ def edit_course(request, pk):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def course_detail(request, pk):
     course_data = get_object_or_404(home_models.GolfCourse, pk=pk)
     course_location = None
@@ -82,7 +92,9 @@ def course_detail(request, pk):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def hole_detail(request, pk):
     hole_data = get_object_or_404(home_models.Hole, pk=pk)
     tee_list = home_models.Tee.objects.filter(hole=hole_data)
@@ -101,7 +113,9 @@ def hole_detail(request, pk):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def create_tee(request, hole_pk):
     hole_data = get_object_or_404(home_models.Hole, pk=hole_pk)
     if request.method == "POST":
@@ -119,14 +133,18 @@ def create_tee(request, hole_pk):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def game_list(request):
     game_list = home_models.Game.objects.all()
     return render(request, "dashboard/games.html", {"game_list": game_list})
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def game_detail(request, pk):
     game_data = get_object_or_404(home_models.Game, pk=pk)
     current_player_count = game_data.players.count()
@@ -175,21 +193,27 @@ def game_detail(request, pk):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def player_list(request):
     player_list = home_models.Player.objects.all()
     return render(request, "dashboard/players.html", {"player_list": player_list})
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def player_detail(request, pk):
     player_data = get_object_or_404(home_models.Player, pk=pk)
     return render(request, "dashboard/player_detail.html", {"player_data": player_data})
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def create_player(request):
     if request.method == "POST":
         form = forms.PlayerForm(request.POST)
@@ -203,7 +227,9 @@ def create_player(request):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def edit_player(request, pk):
     player_data = get_object_or_404(home_models.Player, pk=pk)
     if request.method == "POST":
@@ -218,7 +244,9 @@ def edit_player(request, pk):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def create_game(request):
     if request.method == "POST":
         form = forms.GameForm(request.POST)
@@ -233,7 +261,9 @@ def create_game(request):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def ajax_manage_players_for_game(request):
     data = json.loads(request.body)
     if not all([data["playerId"], data["game"], data["action"]]):
@@ -253,7 +283,9 @@ def ajax_manage_players_for_game(request):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def ajax_manage_game(request):
     data = json.loads(request.body)
     game_id = data["gameId"]
@@ -282,7 +314,9 @@ def ajax_manage_game(request):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def ajax_record_score_for_hole(request):
     data = json.loads(request.body)
 
@@ -298,7 +332,9 @@ def ajax_record_score_for_hole(request):
 
 
 @login_required
-@user_passes_test(utils.is_admin)
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def save_par_to_hole(request):
     data = json.loads(request.body)
     hole_par = data["hole_par"]
