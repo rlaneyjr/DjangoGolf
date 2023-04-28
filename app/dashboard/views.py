@@ -92,8 +92,8 @@ def hole_detail(request, pk):
 
 @login_required
 def create_tee(request, hole_pk):
+    hole_data = get_object_or_404(home_models.Hole, pk=hole_pk)
     if request.method == "POST":
-        hole_data = get_object_or_404(home_models.Hole, pk=hole_pk)
         form = forms.TeeForm(request.POST)
         if form.is_valid():
             tee = form.save(commit=False)
@@ -102,7 +102,9 @@ def create_tee(request, hole_pk):
             messages.add_message(request, messages.INFO, "Tee Created.")
             return redirect("dashboard:hole_detail", hole_pk)
     form = forms.TeeForm()
-    return render(request, "dashboard/create_tee.html", {"form": form})
+    return render(
+        request, "dashboard/create_tee.html", {"form": form, "hole_data": hole_data}
+    )
 
 
 @login_required
