@@ -299,4 +299,7 @@ def save_par_to_hole(request):
 
     hole_data.par = hole_par
     hole_data.save()
+
+    messages.add_message(request, messages.INFO, "Tee Created.")
+
     return JsonResponse({"status": "success"})
