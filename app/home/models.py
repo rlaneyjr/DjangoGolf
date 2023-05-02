@@ -72,3 +72,9 @@ class Player(models.Model):
     user_account = models.OneToOneField(
         get_user_model(), on_delete=models.CASCADE, blank=True, null=True
     )
+
+
+class TeeTime(models.Model):
+    course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
+    tee_time = models.DateTimeField()
+    players = models.ManyToManyField("Player")
