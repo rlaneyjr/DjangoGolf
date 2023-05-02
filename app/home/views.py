@@ -13,7 +13,12 @@ def index(request):
         game_list = models.Game.objects.filter(
             status="active", players__in=[request.user.player]
         )
-    return render(request, "home/index.html", {"game_list": game_list})
+    tee_time_list = models.TeeTime.objects.filter(players__in=[request.user.player])
+    return render(
+        request,
+        "home/index.html",
+        {"game_list": game_list, "tee_time_list": tee_time_list},
+    )
 
 
 def course_list(request):

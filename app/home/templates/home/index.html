@@ -27,6 +27,27 @@
         {% endif %}
     </div>
 </div>
+{% if request.user.is_authenticated %}
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                Tee Times
+            </div>
+            <div class="card-body">
+                {% if tee_time_list %}
+                    {{tee_time_list}}
+                {% else %}
+                    <p class="card-text">No tee times found</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary btn-sm">Add Tee Time</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block page_styles %}{% endblock %}
