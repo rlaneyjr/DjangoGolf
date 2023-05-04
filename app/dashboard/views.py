@@ -264,6 +264,15 @@ def create_game(request):
 @user_passes_test(
     utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
 )
+def tee_time_list(request):
+    tee_times = home_models.TeeTime.objects.all()
+    return render(request, "dashboard/tee-time-list.html", {"tee_time_list": tee_times})
+
+
+@login_required
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def ajax_manage_players_for_game(request):
     data = json.loads(request.body)
     if not all([data["playerId"], data["game"], data["action"]]):

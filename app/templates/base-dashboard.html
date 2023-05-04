@@ -200,6 +200,12 @@
                                 Players
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if 'tee-times' in request.path %}active{% endif %}" href="{% url 'dashboard:tee_times' %}">
+                                <span data-feather="shopping-cart" class="align-text-bottom"></span>
+                                Tee Times
+                            </a>
+                        </li>
                     </ul>    
                 </div>
             </nav>
