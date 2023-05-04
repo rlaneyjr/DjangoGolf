@@ -121,3 +121,22 @@ class HoleForm(forms.ModelForm):
     class Meta:
         model = home_models.Hole
         fields = ["par"]
+
+
+class TeeTimeForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                "Create a new Tee Time",
+                "course",
+                "players",
+                "tee_time"
+            ),
+            Submit("submit", "Submit", css_class="btn btn-primary btn-sm"),
+        )
+
+    class Meta:
+        model = home_models.TeeTime
+        fields = ["course", "players", "tee_time"]
