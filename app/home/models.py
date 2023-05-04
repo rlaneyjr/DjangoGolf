@@ -73,6 +73,9 @@ class Player(models.Model):
         get_user_model(), on_delete=models.CASCADE, blank=True, null=True
     )
 
+    def __str__(self):
+        return self.name
+
 
 class TeeTime(models.Model):
     course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
