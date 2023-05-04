@@ -20,6 +20,7 @@ urlpatterns = [
     path("players/add/", views.create_player, name="create_player"),
     path("players/<int:pk>/edit/", views.edit_player, name="edit_player"),
     path("tee-times/", views.tee_time_list, name="tee_times"),
+    path("tee-times/add/", views.create_tee_time, name="create_tee_time"),
     # ajax
     path(
         "ajax/add-player-to-game/",

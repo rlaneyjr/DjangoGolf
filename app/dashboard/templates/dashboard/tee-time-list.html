@@ -1,7 +1,7 @@
 {% extends "base-dashboard.html" %}
 
 {% block button_bar %}
-    <a href="#" class="btn btn-sm btn-outline-secondary">Create Tee Time</a>
+    <a href="{% url 'dashboard:create_tee_time' %}" class="btn btn-sm btn-outline-secondary">Create Tee Time</a>
 {% endblock %}
 
 {% block content %}
