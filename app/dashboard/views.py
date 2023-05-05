@@ -288,6 +288,15 @@ def create_tee_time(request):
 @user_passes_test(
     utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
 )
+def tee_time_detail(request, pk):
+    teetime_data = get_object_or_404(home_models.TeeTime, pk=pk)
+    return render(request, "dashboard/tee-time-detail.html", {"teetime_data": teetime_data})
+
+
+@login_required
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
 def ajax_manage_players_for_game(request):
     data = json.loads(request.body)
     if not all([data["playerId"], data["game"], data["action"]]):
