@@ -274,7 +274,13 @@ def tee_time_list(request):
     utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
 )
 def create_tee_time(request):
-    form = forms.TeeTimeForm()
+    if request.method == "POST":
+        form = forms.TeeTimeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("dashboard:tee_times")
+    else:
+        form = forms.TeeTimeForm()
     return render(request, "dashboard/create-tee-time.html", {"form": form})
 
 

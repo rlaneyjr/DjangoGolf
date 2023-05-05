@@ -124,6 +124,8 @@ class HoleForm(forms.ModelForm):
 
 
 class TeeTimeForm(forms.ModelForm):
+    tee_time = forms.DateTimeField(input_formats=["%m-%d-%Y %H:%M"])
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -131,7 +133,6 @@ class TeeTimeForm(forms.ModelForm):
             Fieldset(
                 "Create a new Tee Time",
                 "course",
-                "players",
                 "tee_time"
             ),
             Submit("submit", "Submit", css_class="btn btn-primary btn-sm"),
@@ -139,4 +140,4 @@ class TeeTimeForm(forms.ModelForm):
 
     class Meta:
         model = home_models.TeeTime
-        fields = ["course", "players", "tee_time"]
+        fields = ["course", "tee_time"]
