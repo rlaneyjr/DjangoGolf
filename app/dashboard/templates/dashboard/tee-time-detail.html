@@ -29,7 +29,30 @@
                 </div>
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary btn-sm">Add Player</button>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">Add Player</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add-player-modal" tabindex="-1" aria-labelledby="example-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="example-modal-label">Add Player to Tee Time</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label class="form-label" for="potential-players">Players</label>
+                <select class="form-select" id="potential-players">
+                    {% for player in potential_player_list %}
+                        <option value="{{player.id}}">{{player.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="add-player-button">Add</button>
             </div>
         </div>
     </div>
@@ -38,4 +61,16 @@
 
 {% block page_styles %}{% endblock %}
 
-{% block page_scripts %}{% endblock %}
+{% block page_scripts %}
+<script>
+    const tee_time_id = "{{teetime_data.id}}";
+    document.getElementById("add-player-button").addEventListener("click", (event) => {
+        const data = {
+            "player": document.getElementById("potential-players").value,
+            "tee_time_id": tee_time_id
+        };
+
+        console.log(data);
+    });
+</script>
+{% endblock %}

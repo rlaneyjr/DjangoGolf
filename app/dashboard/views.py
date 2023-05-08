@@ -290,7 +290,8 @@ def create_tee_time(request):
 )
 def tee_time_detail(request, pk):
     teetime_data = get_object_or_404(home_models.TeeTime, pk=pk)
-    return render(request, "dashboard/tee-time-detail.html", {"teetime_data": teetime_data})
+    potential_player_list = home_models.Player.objects.all().exclude(teetime__in=[teetime_data.id])
+    return render(request, "dashboard/tee-time-detail.html", {"teetime_data": teetime_data, "potential_player_list": potential_player_list})
 
 
 @login_required
