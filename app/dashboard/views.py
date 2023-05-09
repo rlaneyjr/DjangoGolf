@@ -291,7 +291,11 @@ def create_tee_time(request):
 def tee_time_detail(request, pk):
     teetime_data = get_object_or_404(home_models.TeeTime, pk=pk)
     potential_player_list = home_models.Player.objects.all().exclude(teetime__in=[teetime_data.id])
-    return render(request, "dashboard/tee-time-detail.html", {"teetime_data": teetime_data, "potential_player_list": potential_player_list})
+    return render(
+        request,
+        "dashboard/tee-time-detail.html",
+        {"teetime_data": teetime_data, "potential_player_list": potential_player_list}
+    )
 
 
 @login_required
@@ -395,3 +399,24 @@ def save_par_to_hole(request):
     messages.add_message(request, messages.INFO, "Tee Created.")
 
     return JsonResponse({"status": "success"})
+
+
+@login_required
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
+def ajax_manage_tee_time(request):
+    data = json.loads(request.body)
+    action = data["action"]
+
+    if action == "add-player":
+        tee_time_id = data["tee_time_id"]
+        player_id = data["player_id"]
+        tee_time = home_models.TeeTime.objects.filter(pk=tee_time_id).first()
+        player_data = home_models.Player.objects.filter(pk=player_id).first()
+        if tee_time is None or player_data is None:
+            return JsonResponse({"status": "failed"})
+
+        tee_time.players.add(player_data)
+        return JsonResponse({"status": "success"})
+

@@ -63,14 +63,34 @@
 
 {% block page_scripts %}
 <script>
-    const tee_time_id = "{{teetime_data.id}}";
-    document.getElementById("add-player-button").addEventListener("click", (event) => {
+    const teeTimeId = "{{teetime_data.id}}";
+    const teeTimeManageUrl = "{% url 'dashboard:ajax-manage-tee-time' %}";
+    const csrfToken = "{{csrf_token}}";
+    document.getElementById("add-player-button").addEventListener("click", async (event) => {
         const data = {
-            "player": document.getElementById("potential-players").value,
-            "tee_time_id": tee_time_id
+            "player_id": document.getElementById("potential-players").value,
+            "tee_time_id": teeTimeId,
+            "action": "add-player",
         };
 
-        console.log(data);
+        const response = await fetch(teeTimeManageUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            console.log("Error");
+            return;
+        }
+
+        const jsonData = await response.json();
+        if (jsonData.status == "success") {
+            window.location.reload(true);
+        }
     });
 </script>
 {% endblock %}
