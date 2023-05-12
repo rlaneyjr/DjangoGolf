@@ -1,9 +1,10 @@
 import json
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils import timezone
+from django.conf import settings
 from home import models as home_models
 from . import forms
 from . import utils
@@ -439,5 +440,8 @@ def ajax_manage_tee_time(request):
         tee_time.is_active = False
         tee_time.save()
 
-        return JsonResponse({"status": "success"})
+        return JsonResponse({
+            "status": "success",
+            "game_url": settings.BASE_URL + reverse("dashboard:game_detail", args=[new_game.id])}
+        )
     return JsonResponse({"status": "failed", "message": "Unknown Action"})
