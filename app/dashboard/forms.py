@@ -133,11 +133,12 @@ class TeeTimeForm(forms.ModelForm):
             Fieldset(
                 "Create a new Tee Time",
                 "course",
-                "tee_time"
+                "tee_time",
+                "holes_to_play"
             ),
             Submit("submit", "Submit", css_class="btn btn-primary btn-sm"),
         )
 
     class Meta:
         model = home_models.TeeTime
-        fields = ["course", "tee_time"]
+        fields = ["course", "tee_time", "holes_to_play"]
