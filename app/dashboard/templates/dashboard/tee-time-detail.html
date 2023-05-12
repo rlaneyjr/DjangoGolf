@@ -31,10 +31,12 @@
                     {% endif %}
                 </div>
             </div>
+            {% if tee_time.is_active %}
             <div class="card-footer">
                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">Add Player</button>
                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-modal">Start Game</button>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>
