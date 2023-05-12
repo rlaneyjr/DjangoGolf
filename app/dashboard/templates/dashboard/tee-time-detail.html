@@ -17,6 +17,10 @@
                     <span class="ps-2">{{teetime_data.tee_time}}</span>
                 </div>
                 <div class="mb-3">
+                    <label class="fw-bold d-block">Holes to Play:</label>
+                    <span class="ps-2">{{teetime_data.get_holes_to_play_display}}</span>
+                </div>
+                <div class="mb-3">
                     <label class="fw-bold d-block">Status:</label>
                     <span class="ps-2">{{teetime_data.is_active|yesno:"Yes,No"}}</span>
                 </div>
