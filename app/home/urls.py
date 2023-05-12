@@ -24,4 +24,5 @@ urlpatterns = [
         name="ajax-add-player-to-game",
     ),
     path("ajax/manage-game/", views.ajax_manage_game, name="ajax-manage-game"),
+    path("ajax/manage-tee-time/", views.ajax_manage_tee_time, name="ajax-manage-tee-time"),
 ]

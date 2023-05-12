@@ -37,7 +37,7 @@
             </div>
             {% if tee_time_data.is_active %}
             <div class="card-footer">
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#example-modal">
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">
                     Add Player
                 </button>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#example-modal">
@@ -57,11 +57,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                ...
+                <div>
+                    <label class="form-label">Players:</label>
+                    <select class="form-select" id="potential-players">
+                        <option value="none">...</option>
+                        {% for player in potential_player_list %}
+                            <option value="{{player.id}}">{{player.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" id="add-player-confirm">Add</button>
             </div>
         </div>
     </div>
@@ -89,4 +97,36 @@
 
 {% block page_styles %}{% endblock %}
 
-{% block page_scripts %}{% endblock %}
+{% block page_scripts %}
+<script>
+    const teeTimeId = "{{tee_time_data.id}}";
+    const teeTimeManageUrl = "{% url 'home:ajax-manage-tee-time' %}";
+    const csrfToken = "{{csrf_token}}";
+    document.getElementById("add-player-confirm").addEventListener("click", async (event) => {
+        const data = {
+            "player_id": document.getElementById("potential-players").value,
+            "tee_time_id": teeTimeId,
+            "action": "add-player",
+        };
+
+        const response = await fetch(teeTimeManageUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            console.log("Error");
+            return;
+        }
+
+        const jsonData = await response.json();
+        if (jsonData.status == "success") {
+            window.location.reload(true);
+        }
+    });
+</script>
+{% endblock %}

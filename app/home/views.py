@@ -104,7 +104,12 @@ def game_detail(request, pk):
 @login_required
 def tee_time_detail(request, pk):
     tee_time_data = get_object_or_404(models.TeeTime, pk=pk)
-    return render(request, "home/tee-time-detail.html", {"tee_time_data": tee_time_data})
+    potential_player_list = models.Player.objects.all().exclude(teetime__in=[tee_time_data.id])
+    return render(
+        request,
+        "home/tee-time-detail.html",
+        {"tee_time_data": tee_time_data, "potential_player_list": potential_player_list}
+    )
 
 
 @login_required
@@ -213,3 +218,20 @@ def ajax_manage_game(request):
         game_data.save()
         return JsonResponse({"status": "success"})
     return JsonResponse({"status": "failed"})
+
+
+@login_required
+def ajax_manage_tee_time(request):
+    data = json.loads(request.body)
+    action = data["action"]
+
+    if action == "add-player":
+        tee_time_id = data["tee_time_id"]
+        player_id = data["player_id"]
+        tee_time = models.TeeTime.objects.filter(pk=tee_time_id).first()
+        player_data = models.Player.objects.filter(pk=player_id).first()
+        if tee_time is None or player_data is None:
+            return JsonResponse({"status": "failed"})
+        tee_time.players.add(player_data)
+        return JsonResponse({"status": "success"})
+    return JsonResponse({"status": "failed", "message": "Unknown Action"})
