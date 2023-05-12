@@ -1,5 +1,7 @@
 {% extends "base-dashboard.html" %}
 
+{% block page_name %}Tee Times{% endblock %}
+
 {% block button_bar %}
     <a href="{% url 'dashboard:create_tee_time' %}" class="btn btn-sm btn-outline-secondary">Create Tee Time</a>
 {% endblock %}
@@ -14,6 +16,7 @@
                         <th>&nbsp;</th>
                         <th>Course</th>
                         <th>Time</th>
+                        <th>Active</th>
                     </tr>
                 </thead>
                 <tbody class="align-middle">
@@ -22,6 +25,7 @@
                         <td><a href="{% url 'dashboard:tee_time_detail' tee_time.id %}" class="btn btn-primary btn-sm">View</a></td>
                         <td>{{tee_time.course.name}}</td>
                         <td>{{tee_time.tee_time}}</td>
+                        <td>{{tee_time.is_active}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
