@@ -1,10 +1,11 @@
 import json
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import JsonResponse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from home import models
+from dashboard import forms as dashboard_forms
 
 
 def index(request):
@@ -104,6 +105,18 @@ def game_detail(request, pk):
 def tee_time_detail(request, pk):
     tee_time_data = get_object_or_404(models.TeeTime, pk=pk)
     return render(request, "home/tee-time-detail.html", {"tee_time_data": tee_time_data})
+
+
+@login_required
+def create_tee_time(request):
+    if request.method == "POST":
+        form = dashboard_forms.TeeTimeForm(request.POST)
+        if form.is_valid():
+            item = form.save()
+            return redirect("home:tee-time-detail", item.id)
+    else:
+        form = dashboard_forms.TeeTimeForm()
+    return render(request, "home/create-tee-time.html", {"form": form})
 
 
 @login_required
