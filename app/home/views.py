@@ -118,6 +118,7 @@ def create_tee_time(request):
         form = dashboard_forms.TeeTimeForm(request.POST)
         if form.is_valid():
             item = form.save()
+            item.players.add(request.user.player)
             return redirect("home:tee-time-detail", item.id)
     else:
         form = dashboard_forms.TeeTimeForm()
