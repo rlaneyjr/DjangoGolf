@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+HOLE_CHOICES = (
+    ("9", "9 Holes"),
+    ("18", "18 Holes"),
+)
+
 
 class GolfCourse(models.Model):
-    HOLE_CHOICES = (
-        ("9", "9 Holes"),
-        ("18", "18 Holes"),
-    )
     name = models.CharField(max_length=128)
     hole_count = models.CharField(
         max_length=64, choices=HOLE_CHOICES, default=HOLE_CHOICES[0][0]
@@ -36,10 +37,6 @@ class Tee(models.Model):
 
 
 class Game(models.Model):
-    HOLE_CHOICES = (
-        ("9", "9 Holes"),
-        ("18", "18 Holes"),
-    )
     STATUS_CHOICES = (
         ("setup", "Setup"),
         ("active", "Active"),
@@ -81,3 +78,6 @@ class TeeTime(models.Model):
     course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
     tee_time = models.DateTimeField()
     players = models.ManyToManyField("Player")
+    holes_to_play = models.CharField(
+        max_length=64, choices=HOLE_CHOICES, default=HOLE_CHOICES[0][0]
+    )
