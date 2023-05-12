@@ -40,7 +40,7 @@
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">
                     Add Player
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#example-modal">
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-modal">
                     Start Game
                 </button>
             </div>
@@ -83,11 +83,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                ...
+                Are you sure you want to start this game?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" id="start-game-confirm-button">Start Game</button>
             </div>
         </div>
     </div>
@@ -126,6 +126,32 @@
         const jsonData = await response.json();
         if (jsonData.status == "success") {
             window.location.reload(true);
+        }
+    });
+
+    document.getElementById("start-game-confirm-button").addEventListener("click", async () => {
+        const data = {
+            "tee_time_id": teeTimeId,
+            "action": "start-game",
+        };
+
+        const response = await fetch(teeTimeManageUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            console.log("Error");
+            return;
+        }
+
+        const jsonData = await response.json();
+        if (jsonData.status == "success") {
+            window.location.replace(jsonData.game_url);
         }
     });
 </script>

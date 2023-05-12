@@ -234,4 +234,29 @@ def ajax_manage_tee_time(request):
             return JsonResponse({"status": "failed"})
         tee_time.players.add(player_data)
         return JsonResponse({"status": "success"})
+    elif action == "start-game":
+        tee_time_id = data.get("tee_time_id", None)
+        if tee_time_id is None:
+            return JsonResponse({"status": "failed"})
+        tee_time = models.TeeTime.objects.filter(pk=tee_time_id).first()
+        if tee_time is None:
+            return JsonResponse({"status": "failed"})
+
+        new_game = models.Game.objects.create(
+            date_played=tee_time.tee_time,
+            course=tee_time.course,
+            holes_played=tee_time.holes_to_play,
+        )
+
+        # add players from tee time to game
+        for player in tee_time.players.all():
+            new_game.players.add(player)
+
+        tee_time.is_active = False
+        tee_time.save()
+
+        return JsonResponse({
+            "status": "success",
+            "game_url": settings.BASE_URL + reverse("home:game-detail", args=[new_game.id])}
+        )
     return JsonResponse({"status": "failed", "message": "Unknown Action"})

@@ -442,6 +442,6 @@ def ajax_manage_tee_time(request):
 
         return JsonResponse({
             "status": "success",
-            "game_url": settings.BASE_URL + reverse("dashboard:game_detail", args=[new_game.id])}
+            "game_url": settings.BASE_URL + reverse("dashboard:game-detail", args=[new_game.id])}
         )
     return JsonResponse({"status": "failed", "message": "Unknown Action"})
