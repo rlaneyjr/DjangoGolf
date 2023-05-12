@@ -47,7 +47,7 @@
                         <tbody class="align-middle">
                         {% for tee_time in tee_time_list %}
                             <tr>
-                                <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
+                                <td><a href="{% url 'home:tee-time-detail' tee_time.id %}" class="btn btn-primary btn-sm">View</a></td>
                                 <td>{{tee_time.course.name}}</td>
                                 <td>{{tee_time.tee_time}}</td>
                             </tr>

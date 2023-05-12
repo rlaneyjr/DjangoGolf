@@ -10,6 +10,7 @@ urlpatterns = [
     path("games/<int:pk>/", views.game_detail, name="game-detail"),
     path("games/mine/", views.view_my_games, name="my-game-list"),
     path("profile/", views.my_profile, name="profile"),
+    path("tee-times/<int:pk>/", views.tee_time_detail, name="tee-time-detail"),
     path(
         "ajax/record_hole_score/",
         views.ajax_record_hole_score,

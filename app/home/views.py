@@ -9,11 +9,13 @@ from home import models
 
 def index(request):
     game_list = None
+    tee_time_list = None
     if request.user.is_authenticated:
         game_list = models.Game.objects.filter(
             status="active", players__in=[request.user.player]
         )
-    tee_time_list = models.TeeTime.objects.filter(players__in=[request.user.player])
+        tee_time_list = models.TeeTime.objects.filter(players__in=[request.user.player], is_active=True)
+
     return render(
         request,
         "home/index.html",
@@ -96,6 +98,12 @@ def game_detail(request, pk):
             "player_scores": player_scores,
         },
     )
+
+
+@login_required
+def tee_time_detail(request, pk):
+    tee_time_data = get_object_or_404(models.TeeTime, pk=pk)
+    return render(request, "home/tee-time-detail.html", {"tee_time_data": tee_time_data})
 
 
 @login_required
