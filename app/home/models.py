@@ -81,3 +81,4 @@ class TeeTime(models.Model):
     holes_to_play = models.CharField(
         max_length=64, choices=HOLE_CHOICES, default=HOLE_CHOICES[0][0]
     )
+    is_active = models.BooleanField(default=True)
