@@ -26,12 +26,12 @@ def index(request):
 
 def course_list(request):
     course_list = models.GolfCourse.objects.all().order_by("name")
-    return render(request, "home/course_list.html", {"course_list": course_list})
+    return render(request, "home/course-list.html", {"course_list": course_list})
 
 
 def course_detail(request, pk):
     course_data = get_object_or_404(models.GolfCourse, pk=pk)
-    return render(request, "home/course_detail.html", {"course_data": course_data})
+    return render(request, "home/course-detail.html", {"course_data": course_data})
 
 
 @login_required
@@ -88,7 +88,7 @@ def game_detail(request, pk):
 
     return render(
         request,
-        "home/game_detail.html",
+        "home/game-detail.html",
         {
             "game_data": game_data,
             "hole_scores": hole_scores,
@@ -128,7 +128,7 @@ def create_tee_time(request):
 @login_required
 def view_my_games(request):
     game_list = models.Game.objects.filter(players__in=[request.user.player])
-    return render(request, "home/view_my_games.html", {"game_list": game_list})
+    return render(request, "home/view-my-games.html", {"game_list": game_list})
 
 
 @login_required
