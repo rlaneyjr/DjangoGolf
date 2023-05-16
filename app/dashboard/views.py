@@ -45,7 +45,7 @@ def create_course(request):
             return redirect("dashboard:courses")
     else:
         form = forms.GolfCourseForm()
-    return render(request, "dashboard/create_course.html", {"form": form})
+    return render(request, "dashboard/create-course.html", {"form": form})
 
 
 @login_required
@@ -64,7 +64,7 @@ def edit_course(request, pk):
         form = forms.EditGolfCourseForm(instance=course_data)
     return render(
         request,
-        "dashboard/edit_course.html",
+        "dashboard/edit-course.html",
         {"form": form, "course_data": course_data},
     )
 
@@ -83,7 +83,7 @@ def course_detail(request, pk):
         )
     return render(
         request,
-        "dashboard/course_detail.html",
+        "dashboard/course-detail.html",
         {
             "course_data": course_data,
             "course_location": course_location,
@@ -103,7 +103,7 @@ def hole_detail(request, pk):
     form = forms.HoleForm(instance=hole_data)
     return render(
         request,
-        "dashboard/hole_detail.html",
+        "dashboard/hole-detail.html",
         {
             "hole_data": hole_data,
             "course_data": course_data,
@@ -129,7 +129,7 @@ def create_tee(request, hole_pk):
             return redirect("dashboard:hole_detail", hole_pk)
     form = forms.TeeForm()
     return render(
-        request, "dashboard/create_tee.html", {"form": form, "hole_data": hole_data}
+        request, "dashboard/create-tee.html", {"form": form, "hole_data": hole_data}
     )
 
 
@@ -182,7 +182,7 @@ def game_detail(request, pk):
         hole_list.append(f"{hole_num}")
     return render(
         request,
-        "dashboard/game_detail.html",
+        "dashboard/game-detail.html",
         {
             "game_data": game_data,
             "player_list": player_list,
@@ -208,7 +208,7 @@ def player_list(request):
 )
 def player_detail(request, pk):
     player_data = get_object_or_404(home_models.Player, pk=pk)
-    return render(request, "dashboard/player_detail.html", {"player_data": player_data})
+    return render(request, "dashboard/player-detail.html", {"player_data": player_data})
 
 
 @login_required
@@ -224,7 +224,7 @@ def create_player(request):
             return redirect("dashboard:players")
     else:
         form = forms.PlayerForm()
-    return render(request, "dashboard/create_player.html", {"form": form})
+    return render(request, "dashboard/create-player.html", {"form": form})
 
 
 @login_required
@@ -241,7 +241,7 @@ def edit_player(request, pk):
             return redirect("dashboard:player_detail", pk)
     else:
         form = forms.PlayerForm(instance=player_data)
-    return render(request, "dashboard/create_player.html", {"form": form})
+    return render(request, "dashboard/create-player.html", {"form": form})
 
 
 @login_required
@@ -258,7 +258,7 @@ def create_game(request):
             return redirect("dashboard:game_detail", game.id)
     else:
         form = forms.GameForm()
-    return render(request, "dashboard/create_game.html", {"form": form})
+    return render(request, "dashboard/create-game.html", {"form": form})
 
 
 @login_required
