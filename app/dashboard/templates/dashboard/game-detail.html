@@ -39,6 +39,7 @@
                 {% if game_data.status == "setup" and current_player_count > 0 %}
                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-modal">Start Game</button>
                 {% endif %}
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#toggle-league-game-modal">Toggle League Game</button>
                 <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete-game-modal">Delete Game</button>
             </div>
         </div>
@@ -203,6 +204,30 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="toggle-league-game-modal" tabindex="-1" aria-labelledby="toggle-league-game-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="toggle-league-game-modal-label">Change League Game Status?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% if game_data.league_game %}
+                    <p>Are you sure you want to mark this as a normal game?</p>
+                {% else %}
+                    <p>Are you sure you want to mark this as a league game?</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}
 
 {% block page_styles %}{% endblock %}
