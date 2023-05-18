@@ -41,6 +41,7 @@ class Game(models.Model):
         ("setup", "Setup"),
         ("active", "Active"),
         ("completed", "Completed"),
+        ("not_finished", "Not Finished"),
     )
     date_played = models.DateTimeField()
     course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
