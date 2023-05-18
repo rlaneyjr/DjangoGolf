@@ -52,6 +52,7 @@ class Game(models.Model):
         max_length=64, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0]
     )
     players = models.ManyToManyField("Player", through="PlayerGameLink")
+    league_game = models.BooleanField(default=False)
 
 
 class PlayerGameLink(models.Model):
