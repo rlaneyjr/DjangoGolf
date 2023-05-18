@@ -58,6 +58,10 @@ def ajax_manage_game(request):
                 hole_score.save()
         messages.add_message(request, messages.INFO, "Game Started.")
         return JsonResponse({"status": "success"})
+    elif data["action"] == "toggle-league-game":
+        game_data.league_game = not game_data.league_game
+        game_data.save()
+        return JsonResponse({"status": "success"})
     return HttpResponseBadRequest("Unknown Action")
 
 
