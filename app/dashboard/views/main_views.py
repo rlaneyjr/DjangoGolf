@@ -136,7 +136,7 @@ def create_tee(request, hole_pk):
 )
 def game_list(request):
     game_list = home_models.Game.objects.all()
-    return render(request, "dashboard/games.html", {"game_list": game_list})
+    return render(request, "dashboard/game-list.html", {"game_list": game_list})
 
 
 @login_required
