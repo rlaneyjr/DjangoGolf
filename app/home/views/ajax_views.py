@@ -88,6 +88,10 @@ def ajax_manage_game(request):
         game_data.status = "completed"
         game_data.save()
         return JsonResponse({"status": "success"})
+    elif data["action"] == "toggle-league-game":
+        game_data.league_game = not game_data.league_game
+        game_data.save()
+        return JsonResponse({"status": "success"})
     return JsonResponse({"status": "failed"})
 
 

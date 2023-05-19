@@ -20,6 +20,11 @@
                     <div class="fw-bold">Date Played:</div>
                     <div class="ps-3">{{game_data.date_played}}</div>
                 </div>
+                <div class="mb-3">
+                    <div class="fw-bold">League Game:</div>
+                    <div class="ps-3">{{game_data.league_game}}</div>
+                </div>
+                
                 <hr />
                 <div class="mb-3">
                     <table class="table">
@@ -48,9 +53,11 @@
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-modal">
                         Start Game
                     </button>
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#toggle-league-game-modal">Toggle League Status</button>
                 </div>
             {% elif game_data.status == "active" %}
                 <div class="card-footer">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#toggle-league-game-modal">Toggle League Status</button>
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#complete-game-modal">
                         Complete Game
                     </button>
@@ -60,7 +67,7 @@
     </div>
     {% if game_data.status != "setup" %}
     <div class="col-12">
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-header d-flex justify-content-between">
                 <span class="pt-1">Scores: Hole {{current_hole.order}}</span>
                 {% if game_data.status == "active" %}
@@ -159,6 +166,29 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="toggle-league-game-modal" tabindex="-1" aria-labelledby="toggle-league-game-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="toggle-league-game-modal-label">Change League Game Status?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% if game_data.league_game %}
+                    <p>Are you sure you want to mark this as a normal game?</p>
+                {% else %}
+                    <p>Are you sure you want to mark this as a league game?</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="toggle-league-game-status-button">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block page_styles %}
@@ -292,6 +322,34 @@
             window.location.reload(true);
         } else {
             console.log(jsonData);
+        }
+    });
+
+    document.getElementById("toggle-league-game-status-button").addEventListener("click", async () => {
+        const data = {
+            game_id: gameId,
+            action: "toggle-league-game",
+        }
+        try {
+            const response = await fetch(manageGameUrl, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                throw new Error("Error sending request");
+                return;
+            }
+            const jsonData = await response.json();
+
+            if (jsonData.status === "success") {
+                return window.location.reload(true);
+            }
+        } catch(e) {
+            console.log("Error: ", e.message)
         }
     });
 </script>
