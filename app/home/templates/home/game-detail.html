@@ -66,7 +66,7 @@
         </div>
     </div>
     {% if game_data.status != "setup" %}
-    <div class="col-12">
+    <div class="col-12 mb-3">
         <div class="card mb-3">
             <div class="card-header d-flex justify-content-between">
                 <span class="pt-1">Scores: Hole {{current_hole.order}}</span>
@@ -96,7 +96,15 @@
                 {% else %}
                     <button class="btn btn-primary btn-sm disabled">Prev Hole</button>
                 {% endif %}
-                
+                <select class="form-select mx-2" id="hole-jump">
+                    {% for hole in hole_list %}
+                        {% if hole.order == current_hole.order %}
+                            <option value="{{hole.order}}" selected>{{hole.name}}</option>
+                        {% else %}
+                            <option value="{{hole.order}}">{{hole.name}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
                 {% if next_hole %}
                     <a href="{% url 'home:game-detail' game_data.id %}?hole={{next_hole.order}}" class="btn btn-primary btn-sm">Next Hole</a>
                 {% else %}
@@ -203,6 +211,7 @@
     const manageGameUrl = "{% url 'home:ajax-manage-game' %}";
     const csrfToken = "{{csrf_token}}";
     const gameId = "{{game_data.id}}";
+    const baseHoleUrl = "{% url 'home:game-detail' game_data.id %}?hole="
 
     document.getElementById("save-hole-scores")?.addEventListener("click", async (event) => {
         const data = {"scores": [], "game_id": gameId};
@@ -351,6 +360,11 @@
         } catch(e) {
             console.log("Error: ", e.message)
         }
+    });
+
+    document.getElementById("hole-jump").addEventListener("change", (event) => {
+        const newHole = event.target.value;
+        window.location.href = baseHoleUrl + newHole;
     });
 </script>
 {% endblock %}

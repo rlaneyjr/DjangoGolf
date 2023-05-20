@@ -93,6 +93,7 @@ def game_detail(request, pk):
             "prev_hole": prev_hole,
             "available_players": available_players,
             "player_scores": player_scores,
+            "hole_list": models.Hole.objects.filter(course=game_data.course)
         },
     )
 
