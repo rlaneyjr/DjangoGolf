@@ -5,4 +5,5 @@
 *.pyc
 db.sqlite3
 .DS_Store
-app/static/
+app/static/admin/
+app/static/rest_framework/
