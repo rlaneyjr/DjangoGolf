@@ -68,7 +68,10 @@ def ajax_manage_game(request):
 
     game_data = models.Game.objects.filter(pk=game_id).first()
     if game_data is None:
-        return JsonResponse({"status": "failed"})
+        return JsonResponse({
+            "status": "failed",
+            "message": f"Unable to find game with ID: {game_id}"
+        })
 
     if action == "start-game":
         game_data.status = "active"
@@ -92,7 +95,7 @@ def ajax_manage_game(request):
         game_data.league_game = not game_data.league_game
         game_data.save()
         return JsonResponse({"status": "success"})
-    return JsonResponse({"status": "failed"})
+    return JsonResponse({"status": "failed", "message": "Unknown Error"})
 
 
 @login_required

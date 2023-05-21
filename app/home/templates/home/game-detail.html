@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="row d-none" id="error-alert-wrapper">
+    <div class="col-12">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span id="error-message"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-12 mb-3">
         <div class="card">
@@ -330,7 +339,7 @@
         if (jsonData.status == "success") {
             window.location.reload(true);
         } else {
-            console.log(jsonData);
+            showError("error-message-wrapper", jsonData.message);
         }
     });
 
@@ -358,7 +367,7 @@
                 return window.location.reload(true);
             }
         } catch(e) {
-            console.log("Error: ", e.message)
+            showError("error-message-wrapper", "Error: ", e.message);
         }
     });
 
