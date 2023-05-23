@@ -55,6 +55,9 @@ def ajax_add_player_to_game(request):
     game_data = models.Game.objects.filter(pk=game_id).first()
     player_data = models.Player.objects.filter(pk=player_id).first()
 
+    if game_data is None or player_data is None:
+        return JsonResponse({"status": "failed", "message": "Unable to find player or game"})
+
     game_data.players.add(player_data)
 
     return JsonResponse({"status": "success"})

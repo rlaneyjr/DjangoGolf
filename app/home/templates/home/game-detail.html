@@ -274,7 +274,7 @@
         if (jsonData.status == "success") {
             window.location.reload(true);
         } else {
-            console.log(jsonData);
+            showError("error-message-wrapper", jsonData.message);
         }
     });
 
@@ -302,7 +302,7 @@
         if (jsonData.status == "success") {
             window.location.reload(true);
         } else {
-            console.log(jsonData);
+            showError("error-message-wrapper", jsonData.message);
         }
     });
 
