@@ -34,7 +34,7 @@ def ajax_create_game(request):
     data = json.loads(request.body)
     course_data = models.GolfCourse.objects.filter(pk=data["course_id"]).first()
     if course_data is None:
-        return JsonResponse({"status": "failed"})
+        return JsonResponse({"status": "failed", "message": "Unable to find course"})
 
     game = models.Game.objects.create(course=course_data, date_played=timezone.now())
     game.players.add(request.user.player)

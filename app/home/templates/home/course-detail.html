@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% include 'fragments/error-box.html' %}
+
 <div class="row">
     <div class="col-12">
         <div class="mb-3">
@@ -96,7 +98,7 @@
         if (jsonData.status === "success") {
             window.location.replace(jsonData.game_url);
         } else {
-            console.log(jsonData);
+            showError("error-message-wrapper", jsonData.message);
         }
     });
 </script>
