@@ -36,7 +36,11 @@ def ajax_create_game(request):
     if course_data is None:
         return JsonResponse({"status": "failed", "message": "Unable to find course"})
 
-    game = models.Game.objects.create(course=course_data, date_played=timezone.now())
+    game = models.Game.objects.create(
+        course=course_data,
+        date_played=timezone.now(),
+        holes_played=course_data.hole_count
+    )
     game.players.add(request.user.player)
     return JsonResponse(
         {
