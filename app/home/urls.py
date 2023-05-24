@@ -12,6 +12,7 @@ urlpatterns = [
     path("profile/", views.my_profile, name="profile"),
     path("tee-times/add/", views.create_tee_time, name="create-tee-time"),
     path("tee-times/<int:pk>/", views.tee_time_detail, name="tee-time-detail"),
+    path("download-scorecard/<int:game_pk>/", views.download_scorecard, name="download-scorecard"),
     path(
         "ajax/record_hole_score/",
         views.ajax_record_hole_score,

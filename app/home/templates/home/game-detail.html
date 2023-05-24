@@ -45,6 +45,8 @@
                         {% endfor %}
                         </tbody>
                     </table>
+
+                    <a href="{% url 'home:download-scorecard' game_data.id %}">Download Scorecard</a>
                 </div>
             </div>
             {% if game_data.status == "setup" %}

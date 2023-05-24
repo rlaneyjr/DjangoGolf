@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from home import models
+from home import pdf_utils
 from dashboard import forms as dashboard_forms
 
 
@@ -132,3 +134,12 @@ def view_my_games(request):
 def my_profile(request):
     game_count = models.Game.objects.filter(players__in=[request.user.player]).count()
     return render(request, "home/profile.html", {"game_count": game_count})
+
+
+@login_required
+def download_scorecard(request, game_pk):
+    game_data = get_object_or_404(models.Game, pk=game_pk)
+    pdf_data = pdf_utils.generate_scorecard(game_data)
+    response = HttpResponse(pdf_data.getvalue(), content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=scorecard.pdf'
+    return response
