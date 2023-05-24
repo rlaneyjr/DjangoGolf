@@ -112,16 +112,16 @@ def ajax_manage_tee_time(request):
         tee_time = models.TeeTime.objects.filter(pk=tee_time_id).first()
         player_data = models.Player.objects.filter(pk=player_id).first()
         if tee_time is None or player_data is None:
-            return JsonResponse({"status": "failed"})
+            return JsonResponse({"status": "failed", "message": "Unable to find tee time or player"})
         tee_time.players.add(player_data)
         return JsonResponse({"status": "success"})
     elif action == "start-game":
         tee_time_id = data.get("tee_time_id", None)
         if tee_time_id is None:
-            return JsonResponse({"status": "failed"})
+            return JsonResponse({"status": "failed", "message": "Unable to find tee time id"})
         tee_time = models.TeeTime.objects.filter(pk=tee_time_id).first()
         if tee_time is None:
-            return JsonResponse({"status": "failed"})
+            return JsonResponse({"status": "failed", "message": "Unable to find tee time"})
 
         new_game = models.Game.objects.create(
             date_played=tee_time.tee_time,
