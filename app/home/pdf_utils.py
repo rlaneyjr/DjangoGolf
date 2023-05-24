@@ -12,15 +12,6 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 
 
-data = [
-    ["Hole", 1, 2, 3, 4, 5, 6, 7, 8, 9, "Total"],
-    ["Par", "3", "3", "3", "3", "3", "3", "3", "3", "3", "27"],
-    ["Josh Bright", 5, 3, 4, 3, 3, 3, 4, 5, 3, 38],
-    ["Jason Hembree", 5, 3, 4, 3, 3, 3, 4, 5, 3, 40],
-    ["Nash Mahuron", 5, 3, 4, 3, 3, 3, 4, 5, 3, 38],
-    ["Brian Bright", 5, 3, 4, 3, 3, 3, 4, 5, 3, 40],
-]
-
 LEFT_MARGIN = inch * 0.25
 TOP_MARGIN = inch * 0.15
 MARGIN = LEFT_MARGIN
