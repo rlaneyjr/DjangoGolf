@@ -33,7 +33,21 @@ def generate_header_for_scorecard(game):
     first_row = ["Hole"]
     for i in range(int(game.holes_played)):
         first_row.append(str(i + 1))
+    first_row.append("Total")
     data.append(first_row)
+
+    second_row = ["Par"]
+    hole_list = models.Hole.objects.filter(course=game.course).order_by("order")
+    par_total = 0
+
+    for hole in hole_list:
+        second_row.append(str(hole.par))
+        par_total += hole.par
+
+    second_row.append(par_total)
+
+    data.append(second_row)
+
     return data
 
 
@@ -50,8 +64,15 @@ def generate_score_data(game):
     for player_link in player_link_list:
         player_row = []
         player_row.append(player_link.player.name)
-        for i in range(9):
-            player_row.append(str(i))
+
+        score_list = models.HoleScore.objects.filter(game=player_link).order_by("hole__order")
+        player_total_score = 0
+
+        for score_item in score_list:
+            player_row.append(str(score_item.score))
+            player_total_score += score_item.score
+
+        player_row.append(str(player_total_score))
         data.append(player_row)
     return data
 
