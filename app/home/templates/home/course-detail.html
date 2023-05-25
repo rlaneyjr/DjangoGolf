@@ -42,11 +42,13 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer">
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#create-game-modal">
-                    Start Game
-                </button>
-            </div>
+            {% if request.user.is_authenticated %}
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#create-game-modal">
+                        Start Game
+                    </button>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
