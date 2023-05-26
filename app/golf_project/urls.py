@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from home import forms
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from django_registration.backends.activation.views import RegistrationView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -27,6 +29,14 @@ urlpatterns = [
         auth_views.LogoutView.as_view(template_name="registration/logout.html"),
         name="logout",
     ),
+    path(
+        "accounts/register/",
+        RegistrationView.as_view(
+            form_class=forms.CustomUserForm
+        ),
+        name="django-registration-register",
+    ),
+    path("accounts/", include("django_registration.backends.activation.urls")),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(
         "api/docs/",
