@@ -140,6 +140,15 @@ else:
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
+# Email settings
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", None)
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", None)
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", None)
+EMAIL_PORT = os.environ.get("EMAIL_PORT", None)
+
+
 # Custom user model
 AUTH_USER_MODEL = "core.CoreUser"
 
