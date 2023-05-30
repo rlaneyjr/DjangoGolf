@@ -7,10 +7,31 @@
         <form action="." method="POST">
             {% csrf_token %}
             <div class="card-header">
-                Register
+                Register - GolfApp
             </div>
             <div class="card-body">
-                {{form.as_p}}
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label" for="{{field.auto_id}}">{{field.label}}:</label>
+                        {{field}}
+                    </div>
+                {% endfor %}
+
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
             <div class="card-footer">
                 <input type="submit" class="btn btn-primary btn-sm" value="Register" />
