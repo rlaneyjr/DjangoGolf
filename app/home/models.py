@@ -71,6 +71,13 @@ class Player(models.Model):
     user_account = models.OneToOneField(
         get_user_model(), on_delete=models.CASCADE, blank=True, null=True
     )
+    added_by = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="added_by"
+    )
 
     def __str__(self):
         return self.name
