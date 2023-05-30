@@ -153,6 +153,11 @@ DEFAULT_FROM_EMAIL = "no-reply@joshbright.com"
 # Custom user model
 AUTH_USER_MODEL = "core.CoreUser"
 
+ADMIN_LIST = os.environ.get("ADMIN_LIST", []).split(" ")
+ADMINS = []
+if len(ADMIN_LIST) > 0 and ADMIN_LIST[0] != "":
+    for item in ADMIN_LIST:
+        ADMINS.append(item.split("|"))
 
 # Django crispy forms
 CRISPY_TEMPLATE_PACK = "bootstrap5"
