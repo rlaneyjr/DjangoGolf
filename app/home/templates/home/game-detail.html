@@ -18,10 +18,12 @@
                     <div class="fw-bold">Status:</div>
                     <div class="ps-3">{{game_data.get_status_display}}</div>
                 </div>
-                <div class="mb-3">
-                    <div class="fw-bold">Date Played:</div>
-                    <div class="ps-3">{{game_data.date_played}}</div>
-                </div>
+                {% if game_data.status != "setup" %}
+                    <div class="mb-3">
+                        <div class="fw-bold">Date Played:</div>
+                        <div class="ps-3">{{game_data.date_played}}</div>
+                    </div>
+                {% endif %}
                 <div class="mb-3">
                     <div class="fw-bold">Holes:</div>
                     <div class="ps-3">{{game_data.holes_played}}</div>
