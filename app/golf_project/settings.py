@@ -148,7 +148,7 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", None)
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", None)
 EMAIL_PORT = os.environ.get("EMAIL_PORT", None)
 EMAIL_USE_TLS = True
-
+DEFAULT_FROM_EMAIL = "no-reply@joshbright.com"
 
 # Custom user model
 AUTH_USER_MODEL = "core.CoreUser"
