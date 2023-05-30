@@ -38,7 +38,6 @@ def ajax_create_game(request):
 
     game = models.Game.objects.create(
         course=course_data,
-        date_played=timezone.now(),
         holes_played=course_data.hole_count
     )
     game.players.add(request.user.player)
@@ -82,6 +81,7 @@ def ajax_manage_game(request):
 
     if action == "start-game":
         game_data.status = "active"
+        game_data.date_played = timezone.now()
         game_data.save()
 
         hole_list = models.Hole.objects.filter(course=game_data.course)
