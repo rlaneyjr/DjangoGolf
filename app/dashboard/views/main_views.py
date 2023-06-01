@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils import timezone
 from home import models as home_models
+from home import utils as home_utils
 from dashboard import forms
 from dashboard import utils
 
@@ -146,11 +147,7 @@ def game_list(request):
 def game_detail(request, pk):
     game_data = get_object_or_404(home_models.Game, pk=pk)
     current_player_count = game_data.players.count()
-    player_list = home_models.Player.objects.filter(
-        added_by=request.user
-    ).exclude(
-        game__in=[game_data.id]
-    )
+    player_list = home_utils.get_players_for_game(request.user, game_data)
     hole_data = {}
     hole_list = []
 
