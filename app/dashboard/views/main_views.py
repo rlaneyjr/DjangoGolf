@@ -146,7 +146,11 @@ def game_list(request):
 def game_detail(request, pk):
     game_data = get_object_or_404(home_models.Game, pk=pk)
     current_player_count = game_data.players.count()
-    player_list = home_models.Player.objects.all().exclude(game__in=[game_data.id])
+    player_list = home_models.Player.objects.filter(
+        added_by=request.user
+    ).exclude(
+        game__in=[game_data.id]
+    )
     hole_data = {}
     hole_list = []
 

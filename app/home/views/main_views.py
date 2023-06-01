@@ -44,7 +44,11 @@ def game_detail(request, pk):
     player_scores = {}
 
     if game_data.status == "setup":
-        available_players = models.Player.objects.all().exclude(game__in=[game_data.id])
+        available_players = models.Player.objects.filter(
+            added_by=request.user
+        ).exclude(
+            game__in=[game_data.id]
+        )
 
         game_links = models.PlayerGameLink.objects.filter(
             player__in=game_data.players.all(), game=game_data
@@ -103,7 +107,11 @@ def game_detail(request, pk):
 @login_required
 def tee_time_detail(request, pk):
     tee_time_data = get_object_or_404(models.TeeTime, pk=pk)
-    potential_player_list = models.Player.objects.all().exclude(teetime__in=[tee_time_data.id])
+    potential_player_list = models.Player.objects.filter(
+        added_by=request.user
+    ).exclude(
+        teetime__in=[tee_time_data.id]
+    )
     return render(
         request,
         "home/tee-time-detail.html",
