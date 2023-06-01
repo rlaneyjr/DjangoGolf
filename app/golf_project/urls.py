@@ -37,7 +37,26 @@ urlpatterns = [
         name="django-registration-register",
     ),
     path("accounts/", include("django_registration.backends.activation.urls")),
-    path("accounts/", include("django.contrib.auth.urls")),
+    path(
+        "accounts/password-reset/",
+        auth_views.PasswordResetView.as_view(
+            template_name="registration/password_reset_form.html",
+        ),
+        name="password_reset",
+    ),
+    path(
+        "accounts/password-reset/done/",
+        auth_views.PasswordResetDoneView.as_view(
+            template_name="registration/password_reset_done.html",
+        ),
+        name="password_reset_done",
+    ),
+    # path(
+    #     "accounts/change-password/",
+    #     auth_views.PasswordChangeView.as_view(
+    #         template_name="registration/password_reset_form.html"
+    #     )
+    # ),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(
         "api/docs/",
