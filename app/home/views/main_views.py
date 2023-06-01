@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from home import models
 from home import pdf_utils
+from home import utils
 from dashboard import forms as dashboard_forms
 
 
@@ -44,11 +45,7 @@ def game_detail(request, pk):
     player_scores = {}
 
     if game_data.status == "setup":
-        available_players = models.Player.objects.filter(
-            added_by=request.user
-        ).exclude(
-            game__in=[game_data.id]
-        )
+        available_players = utils.get_players_for_game(request.user, game_data)
 
         game_links = models.PlayerGameLink.objects.filter(
             player__in=game_data.players.all(), game=game_data
