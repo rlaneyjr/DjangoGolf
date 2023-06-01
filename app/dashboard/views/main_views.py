@@ -220,7 +220,9 @@ def create_player(request):
     if request.method == "POST":
         form = forms.PlayerForm(request.POST)
         if form.is_valid():
-            form.save()
+            item = form.save(commit=False)
+            item.added_by = request.user
+            item.save()
             messages.add_message(request, messages.INFO, "Player Created.")
             return redirect("dashboard:players")
     else:
