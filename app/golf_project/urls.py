@@ -37,6 +37,7 @@ urlpatterns = [
         name="django-registration-register",
     ),
     path("accounts/", include("django_registration.backends.activation.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(
         "api/docs/",
