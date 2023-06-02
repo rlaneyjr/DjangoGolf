@@ -16,3 +16,10 @@ class GolfCourseViewSet(viewsets.ViewSet):
         course = get_object_or_404(queryset, pk=pk)
         serializer = serializers.GolfCourseSerializer(course)
         return Response(serializer.data)
+
+
+class GameViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = models.Game.objects.all()
+        serializer = serializers.GameSerializer(queryset, many=True)
+        return Response(serializer.data)
