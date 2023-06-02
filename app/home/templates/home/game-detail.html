@@ -282,7 +282,7 @@
         if (jsonData.status == "success") {
             window.location.reload(true);
         } else {
-            showError("error-message-wrapper", jsonData.message);
+            showError("error-alert-wrapper", jsonData.message);
         }
     });
 
@@ -310,7 +310,7 @@
         if (jsonData.status == "success") {
             window.location.reload(true);
         } else {
-            showError("error-message-wrapper", jsonData.message);
+            showError("error-alert-wrapper", jsonData.message);
         }
     });
 
@@ -340,7 +340,7 @@
         if (jsonData.status == "success") {
             window.location.reload(true);
         } else {
-            showError("error-message-wrapper", jsonData.message);
+            showError("error-alert-wrapper", jsonData.message);
         }
     });
 
@@ -368,7 +368,7 @@
                 return window.location.reload(true);
             }
         } catch(e) {
-            showError("error-message-wrapper", "Error: ", e.message);
+            showError("error-alert-wrapper", "Error: ", e.message);
         }
     });
 
