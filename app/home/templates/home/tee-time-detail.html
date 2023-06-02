@@ -128,7 +128,7 @@
         if (jsonData.status == "success") {
             window.location.reload(true);
         } else {
-            showError("error-message-wrapper", jsonData.message);
+            showError("error-alert-wrapper", jsonData.message);
         }
     });
 
@@ -156,7 +156,7 @@
         if (jsonData.status == "success") {
             window.location.replace(jsonData.game_url);
         } else {
-            showError("error-message-wrapper", jsonData.message);
+            showError("error-alert-wrapper", jsonData.message);
         }
     });
 </script>
