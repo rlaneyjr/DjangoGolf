@@ -145,3 +145,19 @@ def ajax_manage_tee_time(request):
             "game_url": settings.BASE_URL + reverse("home:game-detail", args=[new_game.id])}
         )
     return JsonResponse({"status": "failed", "message": "Unknown Action"})
+
+
+@login_required
+def ajax_add_player(request):
+    data = json.loads(request.body)
+    player_name = data.get("player-name", None)
+    if player_name is None or player_name == "":
+        return JsonResponse({"status": "failed", "message": "Unable to find player name"})
+
+    existing_player = models.Player.objects.filter(added_by=request.user, name=player_name).exists()
+    if existing_player:
+        return JsonResponse({"status": "failed", "message": "Player already exists with that name"})
+
+    new_player = models.Player.objects.create(added_by=request.user, name=player_name)
+    new_player.save()
+    return JsonResponse({"status": "success"})

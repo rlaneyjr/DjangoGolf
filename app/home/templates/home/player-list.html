@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% include 'fragments/error-box.html' %}
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -53,7 +54,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm">Add Player</button>
+                <button type="button" class="btn btn-primary btn-sm" id="add-player-button">Add Player</button>
             </div>
         </div>
     </div>
@@ -62,4 +63,36 @@
 
 {% block page_styles %}{% endblock %}
 
-{% block page_scripts %}{% endblock %}
+{% block page_scripts %}
+<script>
+    const csrfToken = "{{csrf_token}}";
+    const addPlayerUrl = "{% url 'home:ajax-add-player' %}";
+
+    document.getElementById("add-player-button").addEventListener("click", async () => {
+        const data = {
+            "player-name": document.getElementById("player-name").value
+        };
+
+        const response = await fetch(addPlayerUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            console.log("Error");
+            return;
+        }
+
+        const jsonData = await response.json();
+        if (jsonData.status == "success") {
+            window.location.reload(true);
+        } else {
+            showError("error-alert-wrapper", jsonData.message);
+        }
+    })
+</script>
+{% endblock %}
