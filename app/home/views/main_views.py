@@ -148,3 +148,9 @@ def download_scorecard(request, game_pk):
     response = HttpResponse(pdf_data.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=scorecard.pdf'
     return response
+
+
+@login_required
+def player_list(request):
+    player_list = models.Player.objects.filter(added_by=request.user)
+    return render(request, "home/player-list.html", {"player_list": player_list})
