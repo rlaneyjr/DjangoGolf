@@ -19,7 +19,18 @@ class GolfCourseViewSet(viewsets.ViewSet):
 
 
 class GameViewSet(viewsets.ViewSet):
+    """
+        Note: Should only be able to list your own games
+    """
+
     def list(self, request):
         queryset = models.Game.objects.all()
         serializer = serializers.GameSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class PlayerViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = models.Player.objects.filter(added_by=request.user)
+        serializer = serializers.PlayerSerializer(queryset, many=True)
         return Response(serializer.data)

@@ -1,5 +1,20 @@
 from rest_framework import serializers
 from home import models
+from core.api import serializers as core_serializers
+
+
+class PlayerSerializer(serializers.ModelSerializer):
+    added_by = core_serializers.UserSerializer(many=False, read_only=True)
+    user_account = core_serializers.UserSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = models.Player
+        fields = [
+            "id",
+            "name",
+            "added_by",
+            "user_account"
+        ]
 
 
 class GolfCourseSerializer(serializers.ModelSerializer):
