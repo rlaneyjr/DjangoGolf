@@ -27,6 +27,5 @@ urlpatterns = [
     ),
     path("ajax/manage-game/", views.ajax_manage_game, name="ajax-manage-game"),
     path("ajax/manage-tee-time/", views.ajax_manage_tee_time, name="ajax-manage-tee-time"),
-    path("ajax/add-player/", views.ajax_add_player, name="ajax-add-player"),
     path("home/api/", include("home.api.urls")),
 ]
