@@ -34,3 +34,9 @@ class PlayerViewSet(viewsets.ViewSet):
         queryset = models.Player.objects.filter(added_by=request.user)
         serializer = serializers.PlayerSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def create(self, request):
+        serializer = serializers.PlayerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(added_by=request.user)
+        return Response(serializer.data)

@@ -16,6 +16,9 @@ class PlayerSerializer(serializers.ModelSerializer):
             "user_account"
         ]
 
+    def create(self, validated_data):
+        return models.Player.objects.create(**validated_data)
+
 
 class GolfCourseSerializer(serializers.ModelSerializer):
     class Meta:
