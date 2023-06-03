@@ -10,7 +10,7 @@
             </div>
             <div class="card-body">
                 {% if player_list %}
-                    <table class="table">
+                    <table class="table" id="player-list-table">
                         <thead>
                             <tr>
                                 <th style="width: 5%;">&nbsp;</th>
@@ -66,11 +66,11 @@
 {% block page_scripts %}
 <script>
     const csrfToken = "{{csrf_token}}";
-    const addPlayerUrl = "{% url 'home:ajax-add-player' %}";
+    const addPlayerUrl = "{% url 'home:players-list' %}";
 
     document.getElementById("add-player-button").addEventListener("click", async () => {
         const data = {
-            "player-name": document.getElementById("player-name").value
+            "name": document.getElementById("player-name").value
         };
 
         const response = await fetch(addPlayerUrl, {
@@ -87,12 +87,7 @@
             return;
         }
 
-        const jsonData = await response.json();
-        if (jsonData.status == "success") {
-            window.location.reload(true);
-        } else {
-            showError("error-alert-wrapper", jsonData.message);
-        }
-    })
+        window.location.reload(true);
+    });
 </script>
 {% endblock %}
