@@ -82,6 +82,9 @@ class Player(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        unique_together = ["name", "user_account"]
+
 
 class TeeTime(models.Model):
     course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
