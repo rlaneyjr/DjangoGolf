@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseBadRequest
 from . import serializers
 from home import models
 from rest_framework import viewsets
@@ -36,6 +37,8 @@ class PlayerViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request):
+        if not request.user.is_authenticated:
+            return HttpResponseBadRequest("You must be logged in to create players")
         serializer = serializers.PlayerSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(added_by=request.user)
