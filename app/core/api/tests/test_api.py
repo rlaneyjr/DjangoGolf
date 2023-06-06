@@ -115,6 +115,7 @@ class PrivateUserAPITests(TestCase):
         self.assertEqual(
             res.data,
             {
+                "id": self.user.id,
                 "first_name": self.user.first_name,
                 "last_name": self.user.last_name,
                 "email": self.user.email,
