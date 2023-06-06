@@ -49,3 +49,13 @@ class GameSerializer(serializers.ModelSerializer):
             "league_game",
             "players"
         ]
+
+    def create(self, validated_data):
+        return models.Game.objects.create(**validated_data)
+
+    def validate(self, attrs):
+        course_id = attrs.pop("course_id", None)
+        if course_id is None:
+            raise serializers.ValidationError("Unable to find course id")
+        attrs["course"] = models.GolfCourse.objects.filter(pk=course_id).first()
+        return attrs
