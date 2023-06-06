@@ -46,5 +46,6 @@ class GameSerializer(serializers.ModelSerializer):
             "course",
             "holes_played",
             "status",
-            "league_game"
+            "league_game",
+            "players"
         ]
