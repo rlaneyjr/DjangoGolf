@@ -64,6 +64,7 @@ urlpatterns = [
         name="api-docs",
     ),
     path("", include("home.urls")),
+    path("api/", include("api.urls")),
     path("core/", include("core.urls")),
     path("dashboard/", include("dashboard.urls")),
 ]
