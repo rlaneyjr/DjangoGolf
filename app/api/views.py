@@ -39,6 +39,12 @@ class GameViewSet(viewsets.ViewSet):
         serializer = serializers.GameSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    def create(self, request):
+        serializer = serializers.GameSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
     @action(detail=True, methods=["post"])
     def add_player(self, request, pk=None):
         queryset = models.Game.objects.all()
