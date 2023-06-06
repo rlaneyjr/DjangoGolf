@@ -1,6 +1,7 @@
 from . import views
 from rest_framework.routers import DefaultRouter
 
+app_name = "api"
 
 router = DefaultRouter()
 router.register("golf-courses", views.GolfCourseViewSet, basename="golf-course")
