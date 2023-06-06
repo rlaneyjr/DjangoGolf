@@ -5,7 +5,7 @@ from rest_framework import status
 
 
 @pytest.mark.django_db
-def test_unauth_create_player_fails():
+def test_public_create_player_fails():
     client = APIClient()
     player_endpoint = reverse("api:players-list")
     data = {
@@ -13,4 +13,13 @@ def test_unauth_create_player_fails():
     }
 
     res = client.post(player_endpoint, data)
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_public_get_game_list_fails():
+    client = APIClient()
+    game_endpoint = reverse("api:game-list")
+
+    res = client.get(game_endpoint)
     assert res.status_code == status.HTTP_403_FORBIDDEN
