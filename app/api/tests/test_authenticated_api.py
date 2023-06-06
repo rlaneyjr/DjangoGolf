@@ -7,7 +7,7 @@ from home import models
 
 @pytest.mark.django_db
 def test_can_add_player(normal_user):
-    player_endpoint = reverse("home:players-list")
+    player_endpoint = reverse("api:players-list")
     client = APIClient()
     client.force_authenticate(user=normal_user)
 
@@ -22,7 +22,7 @@ def test_can_add_player(normal_user):
 
 @pytest.mark.django_db
 def test_cant_see_other_users_players(normal_user, second_user):
-    player_endpoint = reverse("home:players-list")
+    player_endpoint = reverse("api:players-list")
     client = APIClient()
     client.force_authenticate(user=normal_user)
 
