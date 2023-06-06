@@ -24,6 +24,12 @@ class GameViewSet(viewsets.ViewSet):
         Note: Should only be able to list your own games
     """
 
+    def retrieve(self, request, pk=None):
+        queryset = models.Game.objects.all()
+        game = get_object_or_404(queryset, pk=pk)
+        serializer = serializers.GameSerializer(game, many=False)
+        return Response(serializer.data)
+
     def list(self, request):
         queryset = models.Game.objects.all()
         serializer = serializers.GameSerializer(queryset, many=True)
