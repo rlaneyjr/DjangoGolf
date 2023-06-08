@@ -52,10 +52,15 @@ def golf_course():
 
 
 @pytest.fixture
-def golf_game(golf_course, player):
+def golf_game(golf_course):
     game = models.Game.objects.create(
         course=golf_course,
         holes_played="9",
     )
-    game.players.add(player)
     return game
+
+
+@pytest.fixture
+def golf_game_with_player(golf_game, player):
+    golf_game.players.add(player)
+    return golf_game

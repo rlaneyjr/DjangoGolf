@@ -4,9 +4,9 @@ from home import models
 
 
 @pytest.mark.django_db
-def test_get_available_players_works(normal_user, golf_game, player, player_two, second_player):
+def test_get_available_players_works(normal_user, golf_game_with_player, player, player_two, second_player):
     # get players that we can add to a game
-    available_players = utils.get_players_for_game(normal_user, golf_game)
+    available_players = utils.get_players_for_game(normal_user, golf_game_with_player)
 
     # the game currently has one player added
     # so we should only have one other player that we can add
