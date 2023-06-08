@@ -45,7 +45,7 @@ class GameViewSet(viewsets.ViewSet):
             serializer.save()
         return Response(serializer.data)
 
-    @action(detail=True, methods=["post"])
+    @action(detail=True, methods=["post"], url_name="add_player")
     def add_player(self, request, pk=None):
         queryset = models.Game.objects.all()
         game = get_object_or_404(queryset, pk=pk)
