@@ -1,10 +1,8 @@
 import pytest
-import rest_framework
 from django.shortcuts import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 from home import models
-from api import views
 
 
 @pytest.mark.django_db
