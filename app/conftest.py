@@ -1,6 +1,7 @@
 import pytest
 from django.contrib.auth import get_user_model
 from home import models
+from dashboard import utils as dashboard_utils
 
 
 @pytest.fixture
@@ -48,6 +49,18 @@ def golf_course():
         name="Test Course",
         hole_count="9",
     )
+    return course
+
+
+@pytest.fixture
+def eighteen_hole_golf_course():
+    course = models.GolfCourse.objects.create(
+        name="Test Big Course",
+        hole_count="18",
+    )
+
+    dashboard_utils.create_holes_for_course(course)
+
     return course
 
 

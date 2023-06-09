@@ -20,3 +20,25 @@ def test_get_available_players_works(normal_user, golf_game_with_player, player,
     # it should be there, but not available for us to add to a game
     all_player_count = models.Player.objects.all().count()
     assert all_player_count == 3
+
+
+@pytest.mark.django_db
+def test_get_all_holes_for_18_hole_course(eighteen_hole_golf_course):
+    hole_list = utils.get_holes_for_game(eighteen_hole_golf_course, "18")
+    assert hole_list.count() == 18
+
+
+@pytest.mark.django_db
+def test_get_holes_for_front_9_on_18_hole_course(eighteen_hole_golf_course):
+    hole_list = utils.get_holes_for_game(eighteen_hole_golf_course, "front-9")
+    assert hole_list.count() == 9
+    assert hole_list[0].order == 1
+    assert hole_list.last().order == 9
+
+
+@pytest.mark.django_db
+def test_get_holes_for_back_9_on_18_hole_course(eighteen_hole_golf_course):
+    hole_list = utils.get_holes_for_game(eighteen_hole_golf_course, "back-9")
+    assert hole_list.count() == 9
+    assert hole_list[0].order == 10
+    assert hole_list.last().order == 18
