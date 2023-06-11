@@ -20,3 +20,5 @@ def get_holes_for_game(course, holes_to_play):
 
     if course.hole_count == "18" and holes_to_play == "back-9":
         return hole_list.filter(order__gte=10)
+
+    return None
