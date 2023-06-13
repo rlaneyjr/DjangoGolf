@@ -5,7 +5,7 @@ from rest_framework import status
 
 
 @pytest.mark.django_db
-def test_public_create_player_fails():
+def test_public_create_player_requires_login():
     client = APIClient()
     player_endpoint = reverse("api:players-list")
     data = {
@@ -17,7 +17,7 @@ def test_public_create_player_fails():
 
 
 @pytest.mark.django_db
-def test_public_get_game_list_fails():
+def test_public_get_game_list_requires_login():
     client = APIClient()
     game_endpoint = reverse("api:game-list")
 
