@@ -62,6 +62,18 @@
             </div>
             <div class="modal-body">
                 <p>Are you sure you want to start a game at {{course_data.name}}?</p>
+                {% if course_data.hole_count == "18" %}
+                    <div>
+                        <label class="form-label" for="hole-count-select">
+                            Holes:
+                        </label>
+                        <select class="form-select" id="hole-count-select">
+                            <option value="18">18</option>
+                            <option value="front-9">Front 9</option>
+                            <option value="back-9">Back 9</option>
+                        </select>
+                    </div>
+                {% endif %}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
