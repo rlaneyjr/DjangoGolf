@@ -23,3 +23,16 @@ def test_public_get_game_list_requires_login():
 
     res = client.get(game_endpoint)
     assert res.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_public_create_game_requires_login(golf_course):
+    client = APIClient()
+    game_endpoint = reverse("api:game-list")
+    data = {
+        "course": golf_course.id,
+        "holes_played": golf_course.hole_count
+    }
+
+    res = client.post(game_endpoint, data)
+    assert res.status_code == status.HTTP_403_FORBIDDEN
