@@ -74,3 +74,22 @@ def test_add_player_to_game_works(normal_user, golf_game, player):
 
     golf_game.refresh_from_db()
     assert player in golf_game.players.all()
+
+
+@pytest.mark.django_db
+def test_remove_player_from_game_works(normal_user, golf_game_with_player):
+    player = golf_game_with_player.players.all().first()
+    remove_player_endpoint = reverse("api:game-remove_player", args=[golf_game_with_player.id])
+    data = {
+        "player": player.id
+    }
+    client = APIClient()
+    client.force_authenticate(user=normal_user)
+
+    res = client.post(remove_player_endpoint, data)
+    assert res.status_code == status.HTTP_200_OK
+
+    golf_game_with_player.refresh_from_db()
+
+    assert golf_game_with_player.players.count() == 0
+    assert player not in golf_game_with_player.players.all()
