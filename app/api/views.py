@@ -54,7 +54,7 @@ class GameViewSet(viewsets.ViewSet):
         serializer = serializers.GameSerializer(game, many=False)
         return Response(serializer.data)
 
-    @action(detail=True, methods=["post"])
+    @action(detail=True, methods=["post"], url_name="remove_player")
     def remove_player(self, request, pk=None):
         queryset = models.Game.objects.all()
         game = get_object_or_404(queryset, pk=pk)
