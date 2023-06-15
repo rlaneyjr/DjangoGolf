@@ -93,3 +93,16 @@ def test_remove_player_from_game_works(normal_user, golf_game_with_player):
 
     assert golf_game_with_player.players.count() == 0
     assert player not in golf_game_with_player.players.all()
+
+
+@pytest.mark.django_db
+def test_add_player_to_game_with_no_player_returns_error(normal_user, golf_game, player):
+    add_player_endpoint = reverse("api:game-add_player", args=[golf_game.id])
+
+    client = APIClient()
+    client.force_authenticate(user=normal_user)
+
+    data = {}
+
+    res = client.post(add_player_endpoint, data)
+    assert res.status_code == status.HTTP_404_NOT_FOUND
