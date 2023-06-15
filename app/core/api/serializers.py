@@ -6,8 +6,11 @@ from rest_framework import serializers
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ["id", "email", "password", "first_name", "last_name"]
-        extra_kwargs = {"password": {"write_only": True, "min_length": 8}}
+        fields = ["id", "email", "password", "first_name", "last_name", "player"]
+        extra_kwargs = {
+            "password": {"write_only": True, "min_length": 8},
+            "player": {"read_only": True}
+        }
 
     def create(self, validated_data):
         """Create and return a user with encrypted password"""
