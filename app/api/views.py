@@ -78,3 +78,20 @@ class PlayerViewSet(viewsets.ViewSet):
         if serializer.is_valid():
             serializer.save(added_by=request.user)
         return Response(serializer.data)
+
+
+class TeeTimeViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        player = request.user.player
+        queryset = models.TeeTime.objects.filter(players__in=[player])
+        serializer = serializers.TeeTimeSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        player = request.user.player
+        queryset = models.TeeTime.objects.filter(players__in=[player])
+        tee_time = get_object_or_404(queryset, pk=pk)
+        serializer = serializers.TeeTimeSerializer(tee_time, many=False)
+        return Response(serializer.data)
