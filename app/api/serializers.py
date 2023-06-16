@@ -59,3 +59,16 @@ class GameSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Unable to find course id")
         attrs["course"] = models.GolfCourse.objects.filter(pk=course_id).first()
         return attrs
+
+
+class TeeTimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TeeTime
+        fields = [
+            "id",
+            "course",
+            "tee_time",
+            "holes_to_play",
+            "is_active",
+            "players"
+        ]
