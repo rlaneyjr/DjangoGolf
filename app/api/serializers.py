@@ -63,6 +63,7 @@ class GameSerializer(serializers.ModelSerializer):
 
 class TeeTimeSerializer(serializers.ModelSerializer):
     course = GolfCourseSerializer(many=False)
+    players = PlayerSerializer(many=True)
 
     class Meta:
         model = models.TeeTime
