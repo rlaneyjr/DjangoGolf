@@ -154,3 +154,8 @@ def download_scorecard(request, game_pk):
 def player_list(request):
     player_list = models.Player.objects.filter(added_by=request.user)
     return render(request, "home/player-list.html", {"player_list": player_list})
+
+
+@login_required
+def location_test(request):
+    return render(request, "home/location-test.html", {})
