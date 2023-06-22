@@ -60,19 +60,13 @@
 <script>
     const statusField = document.getElementById("status-text");
     const locField = document.getElementById("location-text");
+    const storageKey = "location_items";
 
     const saveToStorage = (item) => {
-        let existing = localStorage.getItem("location_items");
-
-        if (existing) {
-            existing = JSON.parse(existing);
-            existing.push(item);
-            localStorage.setItem("location_items", JSON.stringify(existing));
-        } else {
-            let newList = [];
-            newList.push(item);
-            localStorage.setItem("location_items", JSON.stringify(newList));
-        }
+        let existing = localStorage.getItem(storageKey);
+        existing = JSON.parse(existing);
+        existing.push(item);
+        localStorage.setItem(storageKey, JSON.stringify(existing));
     }
     
     const onSuccess = (pos) => {  
@@ -138,9 +132,10 @@
         const tableBody = table.querySelector("tbody");
         const noLocationsFound = document.getElementById("no-items-message");
 
-        let existing = localStorage.getItem("location_items");
-        if (existing) {
-            existing = JSON.parse(existing);
+        let existing = localStorage.getItem(storageKey);
+        existing = JSON.parse(existing);
+
+        if (existing.length) {
             existing.forEach((item) => {
                 const itemRow = generateRow(item);
                 console.log(itemRow);
@@ -158,11 +153,20 @@
 
     document.getElementById("clear-storage").addEventListener("click", (event) => {
         localStorage.clear();
-        renderTable();
-    })
-
-    document.addEventListener("DOMContentLoaded", (event) => {
+        setupStorage();
         renderTable();
     });
+
+    document.addEventListener("DOMContentLoaded", (event) => {
+        setupStorage();
+        renderTable();
+    });
+
+    const setupStorage = () => {
+        let existing = localStorage.getItem(storageKey);
+        if (!existing) {
+            localStorage.setItem(storageKey, JSON.stringify([]));
+        }
+    }
 </script>
 {% endblock %}
