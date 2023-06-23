@@ -38,4 +38,5 @@ urlpatterns = [
         "ajax/save-par-to-hole/", views.save_par_to_hole, name="ajax-save-par-to-hole"
     ),
     path("ajax/manage-tee-time/", views.ajax_manage_tee_time, name="ajax-manage-tee-time"),
+    path("ajax/delete-hole-score/", views.ajax_delete_hole_score, name="ajax-delete-hole-score"),
 ]

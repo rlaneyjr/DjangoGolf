@@ -158,3 +158,18 @@ def ajax_manage_tee_time(request):
             "game_url": settings.BASE_URL + reverse("dashboard:game-detail", args=[new_game.id])}
         )
     return JsonResponse({"status": "failed", "message": "Unknown Action"})
+
+
+@login_required
+@user_passes_test(
+    utils.is_admin, login_url="/dashboard/no-permission/", redirect_field_name=None
+)
+def ajax_delete_hole_score(request):
+    data = json.loads(request.body)
+    score_id = data["score_id"]
+
+    score_data = home_models.HoleScore.objects.filter(pk=score_id).first()
+    if score_data:
+        score_data.delete()
+        return JsonResponse({"status": "success"})
+    return JsonResponse({"status": "failed", "message": "Unable to find hole score"})
