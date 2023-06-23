@@ -150,6 +150,7 @@ def game_detail(request, pk):
     player_list = home_utils.get_players_for_game(request.user, game_data)
     hole_data = {}
     hole_list = []
+    all_scores = []
 
     for player in game_data.players.all():
         hole_data[player.id] = {
@@ -162,6 +163,7 @@ def game_detail(request, pk):
             game=game_data, player=player
         ).first()
         hole_score_list = home_models.HoleScore.objects.filter(game=player_game_link)
+        all_scores.extend(hole_score_list)
         for hole_item in hole_score_list:
             hole_data[player.id]["hole_list"].append(
                 {
@@ -178,6 +180,9 @@ def game_detail(request, pk):
         hole_count = 18
     for hole_num in range(1, hole_count + 1):
         hole_list.append(f"{hole_num}")
+
+    # all_scores = home_models.HoleScore.objects.filter(game=game_data).prefetch_related("hole")
+
     return render(
         request,
         "dashboard/game-detail.html",
@@ -187,6 +192,7 @@ def game_detail(request, pk):
             "current_player_count": current_player_count,
             "hole_data": hole_data,
             "hole_list": hole_list,
+            "all_scores": all_scores
         },
     )
 

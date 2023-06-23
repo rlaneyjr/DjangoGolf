@@ -85,6 +85,28 @@
     </div>
 </div>
 
+{% if all_scores %}
+<div class="row mt-3 mb-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header fw-bold">
+                All Scores
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    {% for score in all_scores %}
+                        <tr>
+                            <td>{{score.hole.order}}</td>
+                            <td>{{score.score}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% if game_data.status == "active" or game_data.status == "completed" %}
 <div class="row mt-3">
     <div class="col-12">
