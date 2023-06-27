@@ -85,15 +85,24 @@
     </div>
 </div>
 
-{% if all_scores %}
 <div class="row mt-3 mb-3">
     <div class="col-12">
         <div class="card">
             <div class="card-header fw-bold">
-                All Scores
+                All Scores <span class="float-end">Show Only 0 Scores <input type="checkbox" id="hide-score-checkbox"></span>
             </div>
             <div class="card-body">
                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>ID</th>
+                            <th>Hole #</th>
+                            <th>Score</th>
+                            <th>Player</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
                     {% for score in all_scores %}
                         <tr>
                             <td><button class="btn btn-sm btn-danger delete-score-button" data-score-id="{{score.id}}">Delete</button></td>
@@ -103,12 +112,12 @@
                             <td>{{score.game.player.name}}</td>
                         </tr>
                     {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-{% endif %}
 
 {% if game_data.status == "active" or game_data.status == "completed" %}
 <div class="row mt-3">
@@ -495,6 +504,14 @@
                 console.log("Error: ", e.message)
             }
         })
-    })
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const showAllScores = {{filter_scores}};
+
+        if (showAllScores) {
+            document.getElementById("hide-score-checkbox").checked = true;
+        }
+    });
 </script>
 {% endblock %}
