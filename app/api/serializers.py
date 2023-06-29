@@ -75,3 +75,14 @@ class TeeTimeSerializer(serializers.ModelSerializer):
             "is_active",
             "players"
         ]
+
+
+class TeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Tee
+        fields = [
+            "id",
+            "name",
+            "distance",
+            "hole"
+        ]
