@@ -44,3 +44,11 @@ def test_public_get_tee_times_requires_login():
     tee_time_endpoint = reverse("api:tee-times-list")
     res = client.get(tee_time_endpoint)
     assert res.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_public_get_tees_requires_login():
+    client = APIClient()
+    tee_time_endpoint = reverse("api:tee-list")
+    res = client.get(tee_time_endpoint)
+    assert res.status_code == status.HTTP_403_FORBIDDEN
