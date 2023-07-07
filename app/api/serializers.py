@@ -36,7 +36,7 @@ class GolfCourseSerializer(serializers.ModelSerializer):
 
 
 class GameSerializer(serializers.ModelSerializer):
-    course = GolfCourseSerializer(many=False, read_only=True)
+    # course = GolfCourseSerializer(many=False, read_only=True)
 
     class Meta:
         model = models.Game
@@ -51,14 +51,9 @@ class GameSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        return models.Game.objects.create(**validated_data)
-
-    def validate(self, attrs):
-        course_id = attrs.pop("course_id", None)
-        if course_id is None:
-            raise serializers.ValidationError("Unable to find course id")
-        attrs["course"] = models.GolfCourse.objects.filter(pk=course_id).first()
-        return attrs
+        course_data = validated_data.pop("course")
+        game = models.Game.objects.create(course=course_data, **validated_data)
+        return game
 
 
 class TeeTimeSerializer(serializers.ModelSerializer):

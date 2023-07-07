@@ -55,7 +55,7 @@ def test_create_game_works(normal_user, golf_course):
     }
 
     res = client.post(game_endpoint, data)
-    assert res.status_code == status.HTTP_200_OK
+    assert res.status_code == status.HTTP_201_CREATED
 
 
 @pytest.mark.django_db

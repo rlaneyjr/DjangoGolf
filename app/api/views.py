@@ -20,29 +20,14 @@ class GolfCourseViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class GameViewSet(viewsets.ViewSet):
+class GameViewSet(viewsets.ModelViewSet):
     """
         Note: Should only be able to list your own games
     """
 
+    queryset = models.Game.objects.all()
     permission_classes = [IsAuthenticated]
-
-    def retrieve(self, request, pk=None):
-        queryset = models.Game.objects.all()
-        game = get_object_or_404(queryset, pk=pk)
-        serializer = serializers.GameSerializer(game, many=False)
-        return Response(serializer.data)
-
-    def list(self, request):
-        queryset = models.Game.objects.all()
-        serializer = serializers.GameSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request):
-        serializer = serializers.GameSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(serializer.data)
+    serializer_class = serializers.GameSerializer
 
     @action(detail=True, methods=["post"], url_name="add_player")
     def add_player(self, request, pk=None):
