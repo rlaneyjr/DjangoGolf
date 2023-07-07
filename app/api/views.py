@@ -50,13 +50,12 @@ class GameViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class PlayerViewSet(viewsets.ViewSet):
+class PlayerViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
+    serializer_class = serializers.PlayerSerializer
 
-    def list(self, request):
-        queryset = models.Player.objects.filter(added_by=request.user)
-        serializer = serializers.PlayerSerializer(queryset, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return models.Player.objects.filter(added_by=self.request.user)
 
     def create(self, request):
         serializer = serializers.PlayerSerializer(data=request.data)
