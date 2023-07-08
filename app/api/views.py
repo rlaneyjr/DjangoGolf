@@ -25,9 +25,13 @@ class GameViewSet(viewsets.ModelViewSet):
         Note: Should only be able to list your own games
     """
 
-    queryset = models.Game.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.GameSerializer
+
+    def get_queryset(self):
+        player = self.request.user.player
+        queryset = models.Game.objects.filter(players__in=[player])
+        return queryset
 
     @action(detail=True, methods=["post"], url_name="add_player")
     def add_player(self, request, pk=None):
