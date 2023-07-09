@@ -85,16 +85,15 @@ class TeeTimeViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class TeeViewSet(viewsets.ViewSet):
+class TeeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
+    queryset = models.Tee.objects.all()
 
     def retrieve(self, request, pk=None):
-        queryset = models.Tee.objects.all()
-        tee = get_object_or_404(queryset, pk=pk)
+        tee = get_object_or_404(self.queryset, pk=pk)
         serializer = serializers.TeeSerializer(tee, many=False)
         return Response(serializer.data)
 
     def list(self, request):
-        queryset = models.Tee.objects.all()
-        serializer = serializers.TeeSerializer(queryset, many=True)
+        serializer = serializers.TeeSerializer(self.queryset, many=True)
         return Response(serializer.data)
