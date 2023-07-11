@@ -73,17 +73,15 @@ class Player(models.Model):
     )
     added_by = models.ForeignKey(
         get_user_model(),
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
+        on_delete=models.CASCADE,
         related_name="added_by"
     )
 
     def __str__(self):
         return self.name
 
-    class Meta:
-        unique_together = ["name", "user_account"]
+    # class Meta:
+    #     unique_together = ["name", "added_by"]
 
 
 class TeeTime(models.Model):
