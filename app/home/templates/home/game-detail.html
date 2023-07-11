@@ -38,15 +38,21 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                {% if game_data.status == "setup" %}
+                                    <th style="width: 5%;">&nbsp;</th>
+                                {% endif %}
                                 <th>Player</th>
                                 <th>Score</th>
                             </tr>
                         </thead>
                         <tbody>
-                        {% for player_name, player_score in player_scores.items %}
+                        {% for player_name, player_data in player_scores.items %}
                             <tr>
+                                {% if game_data.status == "setup" %}
+                                    <td><input type="radio" data-player-id="{{player_data.id}}" name="player-selection"></td>
+                                {% endif %}
                                 <td>{{player_name}}</td>
-                                <td>{{player_score}}</td>
+                                <td>{{player_data.score}}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -59,6 +65,9 @@
                 <div class="card-footer">
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">
                         Add Player
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm d-none" id="remove-player-button" data-bs-toggle="modal" data-bs-target="#remove-player-modal">
+                        Remove Player
                     </button>
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-modal">
                         Start Game
@@ -130,7 +139,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="add-player-modal-label">Modal title</h5>
+                <h5 class="modal-title" id="add-player-modal-label">Add Player</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -207,6 +216,24 @@
     </div>
 </div>
 
+<div class="modal fade" id="remove-player-modal" tabindex="-1" aria-labelledby="remove-player-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="remove-player-modal-label">Remove Player?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove this player from the game?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirm-remove-player-button">Save changes</button>
+            </div>
+        </div>
+      </div>
+</div>
+
 {% endblock %}
 
 {% block page_styles %}
@@ -218,10 +245,41 @@
 <script>
     const scoreUrl = "{% url 'home:ajax-record-hole-score' %}";
     const addPlayerUrl = "{% url 'home:ajax-add-player-to-game' %}";
+    const removePlayerUrl = "{% url 'api:game-remove_player' game_data.id %}";
     const manageGameUrl = "{% url 'home:ajax-manage-game' %}";
     const csrfToken = "{{csrf_token}}";
     const gameId = "{{game_data.id}}";
     const baseHoleUrl = "{% url 'home:game-detail' game_data.id %}?hole="
+
+    document.querySelectorAll("input[name='player-selection']").forEach((el) => {
+        el.addEventListener("click", (event) => {
+            console.log("changed!", event.target.dataset.playerId);
+            document.getElementById("remove-player-button").classList.remove("d-none");
+        });
+    });
+
+    document.getElementById("confirm-remove-player-button").addEventListener("click", async (event) => {
+        const playerId = document.querySelector("input[name='player-selection']:checked").dataset.playerId;
+        const data = {
+            "player": playerId
+        };
+
+        const response = await fetch(removePlayerUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            console.log("Error");
+            return;
+        }
+
+        window.location.reload(true);
+    });
 
     document.getElementById("save-hole-scores")?.addEventListener("click", async (event) => {
         const data = {"scores": [], "game_id": gameId};
@@ -372,7 +430,7 @@
         }
     });
 
-    document.getElementById("hole-jump").addEventListener("change", (event) => {
+    document.getElementById("hole-jump")?.addEventListener("change", (event) => {
         const newHole = event.target.value;
         window.location.href = baseHoleUrl + newHole;
     });
