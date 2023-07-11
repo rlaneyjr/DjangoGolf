@@ -13,6 +13,7 @@
                     <th style="width: 5%;">&nbsp;</th>
                     <th>Name</th>
                     <th>User Account</th>
+                    <th>Added By</th>
                 </thead>
                 <tbody class="align-middle">
                     {% for player in player_list %}
@@ -24,6 +25,7 @@
                         {% else %}
                             <td>Not Set</td>
                         {% endif %}
+                        <td>{{player.added_by.email}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
