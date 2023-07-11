@@ -21,11 +21,6 @@ urlpatterns = [
         name="ajax-record-hole-score",
     ),
     path("ajax/create-game/", views.ajax_create_game, name="ajax-create-game"),
-    path(
-        "ajax/add-player-to-game",
-        views.ajax_add_player_to_game,
-        name="ajax-add-player-to-game",
-    ),
     path("ajax/manage-game/", views.ajax_manage_game, name="ajax-manage-game"),
     path("ajax/manage-tee-time/", views.ajax_manage_tee_time, name="ajax-manage-tee-time"),
     # path("home/api/", include("home.api.urls")),
