@@ -50,23 +50,6 @@ def ajax_create_game(request):
 
 
 @login_required
-def ajax_add_player_to_game(request):
-    data = json.loads(request.body)
-    game_id = data["game_id"]
-    player_id = data["player_id"]
-
-    game_data = models.Game.objects.filter(pk=game_id).first()
-    player_data = models.Player.objects.filter(pk=player_id).first()
-
-    if game_data is None or player_data is None:
-        return JsonResponse({"status": "failed", "message": "Unable to find player or game"})
-
-    game_data.players.add(player_data)
-
-    return JsonResponse({"status": "success"})
-
-
-@login_required
 def ajax_manage_game(request):
     data = json.loads(request.body)
     game_id = data["game_id"]
