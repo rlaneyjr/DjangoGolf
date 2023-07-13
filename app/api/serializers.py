@@ -56,6 +56,17 @@ class GameSerializer(serializers.ModelSerializer):
         return game
 
 
+class HoleScoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.HoleScore
+        fields = [
+            "id",
+            "hole",
+            "score",
+            "game"
+        ]
+
+
 class TeeTimeSerializer(serializers.ModelSerializer):
     course = GolfCourseSerializer(many=False)
     players = PlayerSerializer(many=True)
