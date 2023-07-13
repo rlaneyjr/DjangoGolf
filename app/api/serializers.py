@@ -35,8 +35,40 @@ class GolfCourseSerializer(serializers.ModelSerializer):
         ]
 
 
+class HoleScoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.HoleScore
+        fields = [
+            "id",
+            "hole",
+            "score",
+            "game"
+        ]
+
+
+class PlayerGameLinkSerializer(serializers.ModelSerializer):
+    player = PlayerSerializer(many=False, read_only=True)
+    scores = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.PlayerGameLink
+        fields = [
+            "id",
+            "player",
+            "scores"
+            # "game_set",
+            # "holescore_set"
+        ]
+
+    def get_scores(self, obj):
+        queryset = models.HoleScore.objects.filter(game=obj)
+        return [HoleScoreSerializer(m).data for m in queryset]
+
+
 class GameSerializer(serializers.ModelSerializer):
     # course = GolfCourseSerializer(many=False, read_only=True)
+    # players = PlayerGameLinkSerializer(many=True)
+    player_list = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Game
@@ -47,24 +79,21 @@ class GameSerializer(serializers.ModelSerializer):
             "holes_played",
             "status",
             "league_game",
-            "players"
+            "player_list"
         ]
+        # extra_kwargs = {"course": ""}
+        # fields = "__all__"
+        # depth = 1
 
     def create(self, validated_data):
         course_data = validated_data.pop("course")
         game = models.Game.objects.create(course=course_data, **validated_data)
+        print("GAME ID: ", game.id)
         return game
 
-
-class HoleScoreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.HoleScore
-        fields = [
-            "id",
-            "hole",
-            "score",
-            "game"
-        ]
+    def get_player_list(self, obj):
+        queryset = models.PlayerGameLink.objects.filter(game=obj)
+        return [PlayerGameLinkSerializer(m).data for m in queryset]
 
 
 class TeeTimeSerializer(serializers.ModelSerializer):
