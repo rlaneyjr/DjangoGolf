@@ -59,6 +59,21 @@ def test_create_game_works(normal_user, golf_course):
 
 
 @pytest.mark.django_db
+def test_create_game_without_course_returns_error(normal_user):
+    game_endpoint = reverse("api:game-list")
+    client = APIClient()
+    client.force_authenticate(user=normal_user)
+
+    data = {
+        "course": "",
+        "holes_played": "9"
+    }
+
+    res = client.post(game_endpoint, data)
+    assert res.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
 def test_add_player_to_game_works(normal_user, golf_game, player):
     add_player_endpoint = reverse("api:game-add_player", args=[golf_game.id])
 
