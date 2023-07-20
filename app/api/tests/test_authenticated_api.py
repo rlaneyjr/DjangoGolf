@@ -121,3 +121,23 @@ def test_add_player_to_game_with_no_player_returns_error(normal_user, golf_game,
 
     res = client.post(add_player_endpoint, data)
     assert res.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+def test_set_hole_score_for_game(normal_user, golf_game_with_player, player):
+    add_score_endpoint = reverse("api:game-set_score", args=[golf_game_with_player.id])
+    data = {
+        "hole_number": 1,
+        "score_list": [
+            {
+                "player": player.id,
+                "score": 3
+            }
+        ]
+    }
+
+    client = APIClient()
+    client.force_authenticate(user=normal_user)
+
+    res = client.post(add_score_endpoint, data, format="json")
+    assert res.status_code == status.HTTP_200_OK
