@@ -53,6 +53,28 @@ class GameViewSet(viewsets.ModelViewSet):
         serializer = serializers.GameSerializer(game, many=False)
         return Response(serializer.data)
 
+    @action(detail=True, methods=["post"], url_name="set_score")
+    def set_hole_score(self, request, pk=None):
+        queryset = models.Game.objects.all()
+        game = get_object_or_404(queryset, pk=pk)
+
+        hole_num = int(request.data.get("hole_number"))
+        hole = models.Hole.objects.filter(course=game.course, order=hole_num).first()
+
+        score_list = request.data.get("score_list")
+
+        for score_data in score_list:
+            player_id = score_data.get("player")
+            player_data = get_object_or_404(models.Player, pk=player_id)
+            player_link = models.PlayerGameLink.objects.filter(player=player_data, game=game).first()
+            hole_score = models.HoleScore.objects.filter(hole=hole, game=player_link).first()
+            hole_score.score = score_data["score"]
+            hole_score.save()
+
+        serializer = serializers.GameSerializer(game, many=False)
+
+        return Response(serializer.data)
+
 
 class PlayerViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
