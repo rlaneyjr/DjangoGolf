@@ -68,8 +68,12 @@ class GameViewSet(viewsets.ModelViewSet):
             player_data = get_object_or_404(models.Player, pk=player_id)
             player_link = models.PlayerGameLink.objects.filter(player=player_data, game=game).first()
             hole_score = models.HoleScore.objects.filter(hole=hole, game=player_link).first()
-            hole_score.score = score_data["score"]
-            hole_score.save()
+
+            score_data["hole"] = hole.id
+
+            hole_score_serializer = serializers.HoleScoreSerializer(hole_score, data=score_data, many=False)
+            if hole_score_serializer.is_valid():
+                hole_score_serializer.save()
 
         serializer = serializers.GameSerializer(game, many=False)
 
