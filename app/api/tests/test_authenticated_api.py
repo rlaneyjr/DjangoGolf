@@ -127,7 +127,7 @@ def test_add_player_to_game_with_no_player_returns_error(normal_user, golf_game,
 def test_set_hole_score_for_game(normal_user, golf_game_with_player, player):
     add_score_endpoint = reverse("api:game-set_score", args=[golf_game_with_player.id])
     data = {
-        "hole": 1,
+        "hole_number": 1,
         "score_list": [
             {
                 "player": player.id,
