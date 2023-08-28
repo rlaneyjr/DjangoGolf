@@ -24,14 +24,17 @@ def get_holes_for_game(course, holes_to_play):
     return None
 
 
-def create_hole_scores_for_game(game, holes_to_play):
+def create_hole_scores_for_game(game, holes_to_play=None):
     """
     holes_to_play might be:
         - 9
         - front-9
         - back-9
         - 18
+    Currently putting the idea of front and back nine on hold
+    until I figure out the hole score duplicating problem
     """
+    holes_to_play = game.holes_played
     hole_list = get_holes_for_game(game.course, holes_to_play)
     if hole_list is None:
         return False
