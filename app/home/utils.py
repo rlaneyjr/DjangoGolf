@@ -40,5 +40,11 @@ def create_hole_scores_for_game(game, holes_to_play=None):
             game_link = models.PlayerGameLink.objects.filter(
                 player=player, game=game
             ).first()
+            existing_hole_score = models.HoleScore.objects.filter(
+                hole=hole, game=game_link
+            )
+            if existing_hole_score:
+                continue
+
             hole_score = models.HoleScore(hole=hole, game=game_link)
             hole_score.save()

@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from home import models
+from home import utils
 
 
 @login_required
@@ -65,15 +66,7 @@ def ajax_manage_game(request):
         game_data.date_played = timezone.now()
         game_data.save()
 
-        hole_list = models.Hole.objects.filter(course=game_data.course)
-        for hole in hole_list:
-            for player in game_data.players.all():
-                game_link = models.PlayerGameLink.objects.filter(
-                    player=player, game=game_data
-                ).first()
-
-                hole_score = models.HoleScore(hole=hole, game=game_link)
-                hole_score.save()
+        utils.create_hole_scores_for_game(game_data)
 
         return JsonResponse({"status": "success"})
     elif action == "complete-game":
