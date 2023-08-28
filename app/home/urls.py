@@ -13,15 +13,16 @@ urlpatterns = [
     path("player-list/", views.player_list, name="player-list"),
     path("tee-times/add/", views.create_tee_time, name="create-tee-time"),
     path("tee-times/<int:pk>/", views.tee_time_detail, name="tee-time-detail"),
-    path("download-scorecard/<int:game_pk>/", views.download_scorecard, name="download-scorecard"),
-    path("location-test/", views.location_test, name="location-test"),
     path(
-        "ajax/record_hole_score/",
-        views.ajax_record_hole_score,
-        name="ajax-record-hole-score",
+        "download-scorecard/<int:game_pk>/",
+        views.download_scorecard,
+        name="download-scorecard",
     ),
+    path("location-test/", views.location_test, name="location-test"),
     path("ajax/create-game/", views.ajax_create_game, name="ajax-create-game"),
     path("ajax/manage-game/", views.ajax_manage_game, name="ajax-manage-game"),
-    path("ajax/manage-tee-time/", views.ajax_manage_tee_time, name="ajax-manage-tee-time"),
+    path(
+        "ajax/manage-tee-time/", views.ajax_manage_tee_time, name="ajax-manage-tee-time"
+    ),
     # path("home/api/", include("home.api.urls")),
 ]
