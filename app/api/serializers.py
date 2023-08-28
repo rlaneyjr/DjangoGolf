@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 from home import models
 from core.api import serializers as core_serializers
 
@@ -9,12 +10,7 @@ class PlayerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Player
-        fields = [
-            "id",
-            "name",
-            "added_by",
-            "user_account"
-        ]
+        fields = ["id", "name", "added_by", "user_account"]
 
     def create(self, validated_data):
         return models.Player.objects.create(**validated_data)
@@ -31,25 +27,31 @@ class GolfCourseSerializer(serializers.ModelSerializer):
             "website_link",
             "city",
             "state",
-            "zip_code"
+            "zip_code",
         ]
 
 
 class HoleScoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.HoleScore
-        fields = [
-            "id",
-            "hole",
-            "score",
-            "game"
-        ]
+        fields = ["id", "hole", "score", "game"]
 
     # def validate_game(self, value):
     #     print("VALIDATE", value)
     #     if value == "":
     #         raise serializers.ValidationError()
     #     return value
+
+
+class SimplePlayerGameLinkSerializer(serializers.ModelSerializer):
+    player = PlayerSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = models.PlayerGameLink
+        fields = [
+            "id",
+            "player",
+        ]
 
 
 class PlayerGameLinkSerializer(serializers.ModelSerializer):
@@ -75,6 +77,7 @@ class GameSerializer(serializers.ModelSerializer):
     # course = GolfCourseSerializer(many=False, read_only=True)
     # players = PlayerGameLinkSerializer(many=True)
     player_list = serializers.SerializerMethodField()
+    detail_url = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Game
@@ -85,7 +88,8 @@ class GameSerializer(serializers.ModelSerializer):
             "holes_played",
             "status",
             "league_game",
-            "player_list"
+            "player_list",
+            "detail_url",
         ]
         # extra_kwargs = {"course": ""}
         # fields = "__all__"
@@ -94,12 +98,18 @@ class GameSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         course_data = validated_data.pop("course")
         game = models.Game.objects.create(course=course_data, **validated_data)
-        print("GAME ID: ", game.id)
         return game
 
     def get_player_list(self, obj):
         queryset = models.PlayerGameLink.objects.filter(game=obj)
-        return [PlayerGameLinkSerializer(m).data for m in queryset]
+        return [SimplePlayerGameLinkSerializer(m).data for m in queryset]
+
+    def get_detail_url(self, obj):
+        if "request" in self.context:
+            return reverse(
+                "home:game-detail", request=self.context["request"], args={obj.id}
+            )
+        return ""
 
 
 class TeeTimeSerializer(serializers.ModelSerializer):
@@ -108,22 +118,10 @@ class TeeTimeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.TeeTime
-        fields = [
-            "id",
-            "course",
-            "tee_time",
-            "holes_to_play",
-            "is_active",
-            "players"
-        ]
+        fields = ["id", "course", "tee_time", "holes_to_play", "is_active", "players"]
 
 
 class TeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tee
-        fields = [
-            "id",
-            "name",
-            "distance",
-            "hole"
-        ]
+        fields = ["id", "name", "distance", "hole"]
