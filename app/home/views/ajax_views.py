@@ -9,25 +9,6 @@ from home import utils
 
 
 @login_required
-def ajax_create_game(request):
-    data = json.loads(request.body)
-    course_data = models.GolfCourse.objects.filter(pk=data["course_id"]).first()
-    if course_data is None:
-        return JsonResponse({"status": "failed", "message": "Unable to find course"})
-
-    game = models.Game.objects.create(
-        course=course_data, holes_played=course_data.hole_count
-    )
-    game.players.add(request.user.player)
-    return JsonResponse(
-        {
-            "status": "success",
-            "game_url": settings.BASE_URL + reverse("home:game-detail", args=[game.id]),
-        }
-    )
-
-
-@login_required
 def ajax_manage_game(request):
     data = json.loads(request.body)
     game_id = data["game_id"]

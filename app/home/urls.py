@@ -19,7 +19,6 @@ urlpatterns = [
         name="download-scorecard",
     ),
     path("location-test/", views.location_test, name="location-test"),
-    path("ajax/create-game/", views.ajax_create_game, name="ajax-create-game"),
     path("ajax/manage-game/", views.ajax_manage_game, name="ajax-manage-game"),
     path(
         "ajax/manage-tee-time/", views.ajax_manage_tee_time, name="ajax-manage-tee-time"
