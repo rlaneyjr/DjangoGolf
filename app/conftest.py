@@ -81,6 +81,6 @@ def golf_game(golf_course):
 @pytest.fixture
 def golf_game_with_player(golf_game, player):
     golf_game.players.add(player)
-    utils.create_hole_scores_for_game(golf_game, "9")
+    utils.create_hole_scores_for_game(golf_game)
 
     return golf_game
