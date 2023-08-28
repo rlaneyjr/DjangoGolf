@@ -10,6 +10,10 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class GolfCourseViewSet(viewsets.ViewSet):
+    """
+    API endpoint that allows golf courses to be viewed
+    """
+
     def list(self, request):
         queryset = models.GolfCourse.objects.all()
         serializer = serializers.GolfCourseSerializer(queryset, many=True)
@@ -24,7 +28,7 @@ class GolfCourseViewSet(viewsets.ViewSet):
 
 class GameViewSet(viewsets.ModelViewSet):
     """
-    Note: Should only be able to list your own games
+    API endpoint that allows games to be viewed or edited
     """
 
     permission_classes = [IsAuthenticated]
