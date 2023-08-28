@@ -62,18 +62,22 @@
             </div>
             <div class="modal-body">
                 <p>Are you sure you want to start a game at {{course_data.name}}?</p>
-                {% if course_data.hole_count == "18" %}
+                
                     <div>
                         <label class="form-label" for="hole-count-select">
                             Holes:
                         </label>
                         <select class="form-select" id="hole-count-select">
-                            <option value="18">18</option>
-                            <option value="front-9">Front 9</option>
-                            <option value="back-9">Back 9</option>
+                            {% if course_data.hole_count == "18" %}
+                                <option value="18">18</option>
+                                <option value="front-9">Front 9</option>
+                                <option value="back-9">Back 9</option>
+                            {% else %}
+                                <option value="9">9</option>
+                            {% endif %}
                         </select>
                     </div>
-                {% endif %}
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -90,14 +94,15 @@
 {% block page_scripts %}
 <script>
     const courseId = "{{course_data.id}}";
-    const createGameUrl = "{% url 'home:ajax-create-game' %}";
+    const apiCreateGameUrl = "{% url 'api:game-list' %}";
     const csrfToken = "{{csrf_token}}";
 
     document.getElementById("confirm-start-game-button").addEventListener("click", async (event) => {
         const data = {
-            course_id: courseId
+            "course": courseId,
+            "holes_played": document.getElementById("hole-count-select").value
         };
-        const response = await fetch(createGameUrl, {
+        const response = await fetch(apiCreateGameUrl, {
             method: "POST",
             headers: {
                 "X-CSRFToken": csrfToken,
@@ -105,15 +110,14 @@
             },
             body: JSON.stringify(data)
         });
+
         if (!response.ok) {
             console.log("Problem")
+            return;
         }
+
         const jsonData = await response.json();
-        if (jsonData.status === "success") {
-            window.location.replace(jsonData.game_url);
-        } else {
-            showError("error-alert-wrapper", jsonData.message);
-        }
+        window.location.replace(jsonData.detail_url);
     });
 </script>
 {% endblock %}
