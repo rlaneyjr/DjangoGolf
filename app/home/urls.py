@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 app_name = "home"
@@ -24,5 +24,4 @@ urlpatterns = [
     path(
         "ajax/manage-tee-time/", views.ajax_manage_tee_time, name="ajax-manage-tee-time"
     ),
-    # path("home/api/", include("home.api.urls")),
 ]
