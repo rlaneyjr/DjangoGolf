@@ -247,6 +247,7 @@
     const removePlayerUrl = "{% url 'api:game-remove_player' game_data.id %}";
     const addScoreUrl = "{% url 'api:game-set_score' game_data.id %}";
     const manageGameUrl = "{% url 'home:ajax-manage-game' %}";
+    const startGameUrl = "{% url 'api:game-start' game_data.id %}";
     const csrfToken = "{{csrf_token}}";
     const gameId = "{{game_data.id}}";
     const baseHoleUrl = "{% url 'home:game-detail' game_data.id %}?hole="
@@ -346,11 +347,10 @@
 
     document.getElementById("confirm-start-game-button").addEventListener("click", async (event) => {
         const data = {
-            "action": "start-game",
             "game_id": gameId
         };
 
-        const response = await fetch(manageGameUrl, {
+        const response = await fetch(startGameUrl, {
             method: "POST",
             headers: {
                 "X-CSRFToken": csrfToken,
@@ -363,13 +363,7 @@
             console.log("Error");
             return;
         }
-
-        const jsonData = await response.json();
-        if (jsonData.status == "success") {
-            window.location.reload(true);
-        } else {
-            showError("error-alert-wrapper", jsonData.message);
-        }
+        window.location.reload(true);
     });
 
     document.getElementById("confirm-mark-game-completed-button").addEventListener("click", async (event) => {
