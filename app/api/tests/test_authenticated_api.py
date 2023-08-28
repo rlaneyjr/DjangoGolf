@@ -112,7 +112,11 @@ def test_add_player_to_game_with_no_player_returns_error(
 @pytest.mark.django_db
 def test_set_hole_score_for_game(normal_user, golf_game_with_player, player):
     add_score_endpoint = reverse("api:game-set_score", args=[golf_game_with_player.id])
-    data = {"hole_number": 1, "score_list": [{"player": player.id, "score": 3}]}
+    player_link = models.PlayerGameLink.objects.get(
+        game=golf_game_with_player, player=player
+    )
+    hole_score = models.HoleScore.objects.get(game=player_link, hole=1)
+    data = {"hole_number": 1, "score_list": [{"id": hole_score.id, "score": 3}]}
 
     client = APIClient()
     client.force_authenticate(user=normal_user)
@@ -120,6 +124,8 @@ def test_set_hole_score_for_game(normal_user, golf_game_with_player, player):
     res = client.post(add_score_endpoint, data, format="json")
     assert res.status_code == status.HTTP_200_OK
 
+    hole_score.refresh_from_db()
+    assert hole_score.score == 3
 
 
 # @pytest.mark.django_db
