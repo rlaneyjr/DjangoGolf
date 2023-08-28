@@ -19,15 +19,6 @@ def ajax_manage_game(request):
         return JsonResponse(
             {"status": "failed", "message": f"Unable to find game with ID: {game_id}"}
         )
-
-    if action == "start-game":
-        game_data.status = "active"
-        game_data.date_played = timezone.now()
-        game_data.save()
-
-        utils.create_hole_scores_for_game(game_data)
-
-        return JsonResponse({"status": "success"})
     elif action == "complete-game":
         game_data.status = "completed"
         game_data.save()
