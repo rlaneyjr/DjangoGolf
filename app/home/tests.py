@@ -1,10 +1,15 @@
 import pytest
+import json
+from django.shortcuts import reverse
+from django.test import Client
 from home import utils
 from home import models
 
 
 @pytest.mark.django_db
-def test_get_available_players_works(normal_user, golf_game_with_player, player, player_two, second_player):
+def test_get_available_players_works(
+    normal_user, golf_game_with_player, player, player_two, second_player
+):
     # get players that we can add to a game
     available_players = utils.get_players_for_game(normal_user, golf_game_with_player)
 
@@ -42,3 +47,32 @@ def test_get_holes_for_back_9_on_18_hole_course(eighteen_hole_golf_course):
     assert hole_list.count() == 9
     assert hole_list[0].order == 10
     assert hole_list.last().order == 18
+
+
+@pytest.mark.django_db
+def test_adding_player_late_doesnt_create_duplicate_holes(
+    normal_user, golf_game_with_player, player, player_two
+):
+    client = Client()
+    client.force_login(user=normal_user)
+
+    data = {"game_id": golf_game_with_player.id, "action": "start-game"}
+
+    manage_game_url = reverse("home:ajax-manage-game")
+    response = client.post(manage_game_url, data, content_type="application/json")
+    assert response.status_code == 200
+
+    golf_game_with_player.refresh_from_db()
+    golf_game_with_player.players.add(player_two)
+
+    data = {"game_id": golf_game_with_player.id, "action": "start-game"}
+
+    manage_game_url = reverse("home:ajax-manage-game")
+    response = client.post(manage_game_url, data, content_type="application/json")
+    assert response.status_code == 200
+
+    player_one_game_link = models.PlayerGameLink.objects.get(
+        player=player, game=golf_game_with_player
+    )
+    player_one_holes = models.HoleScore.objects.filter(game=player_one_game_link)
+    assert player_one_holes.count() == 9
