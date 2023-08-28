@@ -33,6 +33,21 @@ class GameViewSet(viewsets.ModelViewSet):
         queryset = models.Game.objects.filter(players__in=[player])
         return queryset
 
+    def create(self, request):
+        if not hasattr(request.user, "player"):
+            return Response(
+                {"message" "You must setup a player to start a game"}, status=400
+            )
+
+        serializer = serializers.GameSerializer(
+            data=request.data, context={"request": request}
+        )
+        if serializer.is_valid():
+            model_obj = serializer.save()
+            model_obj.players.add(request.user.player)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
     @action(detail=True, methods=["post"], url_name="add_player")
     def add_player(self, request, pk=None):
         queryset = models.Game.objects.all()
