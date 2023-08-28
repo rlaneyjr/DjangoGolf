@@ -72,9 +72,7 @@ class Player(models.Model):
         get_user_model(), on_delete=models.CASCADE, blank=True, null=True
     )
     added_by = models.ForeignKey(
-        get_user_model(),
-        on_delete=models.CASCADE,
-        related_name="added_by"
+        get_user_model(), on_delete=models.CASCADE, related_name="added_by"
     )
 
     def __str__(self):
