@@ -58,31 +58,18 @@ class GameViewSet(viewsets.ModelViewSet):
         queryset = models.Game.objects.all()
         game = get_object_or_404(queryset, pk=pk)
 
-        hole_num = int(request.data.get("hole_number"))
-        hole = models.Hole.objects.filter(course=game.course, order=hole_num).first()
-
         score_list = request.data.get("score_list")
-
         for score_data in score_list:
-            player_id = score_data.get("player")
-            try:
-                player_data = get_object_or_404(models.Player, pk=player_id)
-            except ValueError:
-                return Response({"message": "Invalid player id"}, status=400)
-            player_link = models.PlayerGameLink.objects.filter(
-                player=player_data, game=game
-            ).first()
-            hole_score = models.HoleScore.objects.filter(
-                hole=hole, game=player_link
-            ).first()
 
-            score_data["hole"] = hole.id
-
+            hole_score = models.HoleScore.objects.get(pk=score_data["id"])
             hole_score_serializer = serializers.HoleScoreSerializer(
-                hole_score, data=score_data, many=False
+                hole_score, data=score_data, partial=True
             )
+
             if hole_score_serializer.is_valid():
                 hole_score_serializer.save()
+            else:
+                return Response(hole_score_serializer.errors, status=400)
 
         serializer = serializers.GameSerializer(game, many=False)
 
