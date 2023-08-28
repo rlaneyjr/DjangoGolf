@@ -243,7 +243,6 @@
 {% block page_scripts %}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script>
-    const scoreUrl = "{% url 'home:ajax-record-hole-score' %}";
     const addPlayerUrl = "{% url 'api:game-add_player' game_data.id %}";
     const removePlayerUrl = "{% url 'api:game-remove_player' game_data.id %}";
     const addScoreUrl = "{% url 'api:game-set_score' game_data.id %}";
