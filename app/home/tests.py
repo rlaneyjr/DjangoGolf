@@ -76,3 +76,10 @@ def test_adding_player_late_doesnt_create_duplicate_holes(
     )
     player_one_holes = models.HoleScore.objects.filter(game=player_one_game_link)
     assert player_one_holes.count() == 9
+
+
+@pytest.mark.django_db
+def test_start_game_sets_correct_status(normal_user, golf_game):
+    assert golf_game.status == "setup"
+    golf_game.start()
+    assert golf_game.status == "active"
