@@ -185,3 +185,8 @@ REST_FRAMEWORK = {
 
 # Django Registration
 ACCOUNT_ACTIVATION_DAYS = 7
+
+
+CONSTANTS = {
+    "PLAYER_NOT_SETUP": "You must setup a player to start a game",
+}
