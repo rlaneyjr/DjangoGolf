@@ -87,7 +87,10 @@ def game_detail(request, pk):
             hole_score_list = models.HoleScore.objects.filter(game=game_link)
             for hole_score_item in hole_score_list:
                 if game_link.player.name not in player_scores.keys():
-                    player_scores[game_link.player.name] = {"id": game_link.player.id, "score": 0}
+                    player_scores[game_link.player.name] = {
+                        "id": game_link.player.id,
+                        "score": 0,
+                    }
                 player_scores[game_link.player.name]["score"] += hole_score_item.score
 
     return render(
