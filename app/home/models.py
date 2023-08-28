@@ -54,6 +54,10 @@ class Game(models.Model):
     players = models.ManyToManyField("Player", through="PlayerGameLink")
     league_game = models.BooleanField(default=False)
 
+    def start(self):
+        self.status = "active"
+        self.save()
+
 
 class PlayerGameLink(models.Model):
     player = models.ForeignKey("Player", on_delete=models.CASCADE)
