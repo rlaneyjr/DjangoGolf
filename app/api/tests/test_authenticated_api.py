@@ -36,7 +36,7 @@ def test_cant_see_other_users_players(normal_user, second_user):
 
 
 @pytest.mark.django_db
-def test_create_game_works(normal_user, golf_course):
+def test_create_game_works(normal_user, player, golf_course):
     game_endpoint = reverse("api:game-list")
     client = APIClient()
     client.force_authenticate(user=normal_user)
