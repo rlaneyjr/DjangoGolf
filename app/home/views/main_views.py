@@ -14,7 +14,9 @@ def index(request):
         game_list = models.Game.objects.filter(
             status="active", players__in=[request.user.player]
         )
-        tee_time_list = models.TeeTime.objects.filter(players__in=[request.user.player], is_active=True)
+        tee_time_list = models.TeeTime.objects.filter(
+            players__in=[request.user.player], is_active=True
+        )
 
     return render(
         request,
@@ -52,7 +54,10 @@ def game_detail(request, pk):
         )
         for game_link in game_links:
             if game_link.player.name not in player_scores.keys():
-                player_scores[game_link.player.name] = {"id": game_link.player.id, "score": 0}
+                player_scores[game_link.player.name] = {
+                    "id": game_link.player.id,
+                    "score": 0,
+                }
 
     if game_data.status in ["active", "completed"]:
         hole_data = models.Hole.objects.filter(
@@ -96,7 +101,7 @@ def game_detail(request, pk):
             "prev_hole": prev_hole,
             "available_players": available_players,
             "player_scores": player_scores,
-            "hole_list": models.Hole.objects.filter(course=game_data.course)
+            "hole_list": models.Hole.objects.filter(course=game_data.course),
         },
     )
 
@@ -104,15 +109,16 @@ def game_detail(request, pk):
 @login_required
 def tee_time_detail(request, pk):
     tee_time_data = get_object_or_404(models.TeeTime, pk=pk)
-    potential_player_list = models.Player.objects.filter(
-        added_by=request.user
-    ).exclude(
+    potential_player_list = models.Player.objects.filter(added_by=request.user).exclude(
         teetime__in=[tee_time_data.id]
     )
     return render(
         request,
         "home/tee-time-detail.html",
-        {"tee_time_data": tee_time_data, "potential_player_list": potential_player_list}
+        {
+            "tee_time_data": tee_time_data,
+            "potential_player_list": potential_player_list,
+        },
     )
 
 
