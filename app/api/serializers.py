@@ -45,6 +45,12 @@ class HoleScoreSerializer(serializers.ModelSerializer):
             "game"
         ]
 
+    # def validate_game(self, value):
+    #     print("VALIDATE", value)
+    #     if value == "":
+    #         raise serializers.ValidationError()
+    #     return value
+
 
 class PlayerGameLinkSerializer(serializers.ModelSerializer):
     player = PlayerSerializer(many=False, read_only=True)

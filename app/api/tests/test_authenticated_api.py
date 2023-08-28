@@ -141,3 +141,23 @@ def test_set_hole_score_for_game(normal_user, golf_game_with_player, player):
 
     res = client.post(add_score_endpoint, data, format="json")
     assert res.status_code == status.HTTP_200_OK
+
+
+# @pytest.mark.django_db
+# def test_set_hole_score_with_missing_data_returns_error(normal_user, golf_game_with_player, player):
+#     add_score_endpoint = reverse("api:game-set_score", args=[golf_game_with_player.id])
+#     data = {
+#         "hole_number": 1,
+#         "score_list": [
+#             {
+#                 "player": "",
+#                 "score": 3
+#             }
+#         ]
+#     }
+
+#     client = APIClient()
+#     client.force_authenticate(user=normal_user)
+
+#     res = client.post(add_score_endpoint, data, format="json")
+#     assert res.status_code == status.HTTP_200_OK
