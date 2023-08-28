@@ -9,28 +9,6 @@ from home import utils
 
 
 @login_required
-def ajax_record_hole_score(request):
-    data = json.loads(request.body)
-    game_id = data["game_id"]
-    game_data = models.Game.objects.filter(pk=game_id).first()
-    if game_data is None:
-        return JsonResponse({"status": "failed"})
-
-    if game_data.status != "active":
-        return JsonResponse({"status": "failed"})
-
-    score_list = data["scores"]
-    for score in score_list:
-        hole_score = models.HoleScore.objects.filter(pk=score["score_id"]).first()
-        if hole_score is None:
-            return JsonResponse({"status": "failed"})
-        hole_score.score = score["score"]
-        hole_score.save()
-
-    return JsonResponse({"status": "success"})
-
-
-@login_required
 def ajax_create_game(request):
     data = json.loads(request.body)
     course_data = models.GolfCourse.objects.filter(pk=data["course_id"]).first()
