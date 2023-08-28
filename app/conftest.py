@@ -20,6 +20,8 @@ def second_user():
 @pytest.fixture
 def player(normal_user):
     player = models.Player.objects.create(name="Test Player", added_by=normal_user)
+    normal_user.player = player
+    normal_user.save()
     return player
 
 
@@ -32,6 +34,8 @@ def player_two(normal_user):
 @pytest.fixture
 def second_player(second_user):
     player = models.Player.objects.create(name="Test Player", added_by=second_user)
+    second_user.player = player
+    second_user.save()
     return player
 
 
