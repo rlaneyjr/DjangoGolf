@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 HOLE_CHOICES = (
     ("9", "9 Holes"),
@@ -56,6 +57,7 @@ class Game(models.Model):
 
     def start(self):
         self.status = "active"
+        self.date_played = timezone.now()
         self.save()
 
 
