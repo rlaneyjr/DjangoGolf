@@ -246,6 +246,7 @@
     const scoreUrl = "{% url 'home:ajax-record-hole-score' %}";
     const addPlayerUrl = "{% url 'api:game-add_player' game_data.id %}";
     const removePlayerUrl = "{% url 'api:game-remove_player' game_data.id %}";
+    const addScoreUrl = "{% url 'api:game-set_score' game_data.id %}";
     const manageGameUrl = "{% url 'home:ajax-manage-game' %}";
     const csrfToken = "{{csrf_token}}";
     const gameId = "{{game_data.id}}";
@@ -282,16 +283,16 @@
     });
 
     document.getElementById("save-hole-scores")?.addEventListener("click", async (event) => {
-        const data = {"scores": [], "game_id": gameId};
+        const data = {"hole_number": 1, "score_list": []};
         document.querySelectorAll(".hole-score").forEach((el) => {
             const holeScore = {
-                "score_id": el.dataset.holeScoreId,
+                "id": el.dataset.holeScoreId,
                 "score": el.value
             }
-            data.scores.push(holeScore);
+            data.score_list.push(holeScore);
         });
 
-        const response = await fetch(scoreUrl, {
+        const response = await fetch(addScoreUrl, {
             method: "POST",
             headers: {
                 "X-CSRFToken": csrfToken,
@@ -301,11 +302,17 @@
         });
 
         if (!response.ok) {
-            console.log("Error");
+            const jsonData = await response.json();
+            Toastify({
+                text: "Error: " + jsonData.message,
+                duration: 2000,
+                gravity: "bottom", // `top` or `bottom`
+                position: "center", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+            }).showToast();
+            
             return;
         }
-
-        const jsonData = await response.json();
 
         Toastify({
             text: "Scores Saved",
