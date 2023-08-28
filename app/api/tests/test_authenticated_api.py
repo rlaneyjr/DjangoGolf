@@ -11,9 +11,7 @@ def test_can_add_player(normal_user):
     client = APIClient()
     client.force_authenticate(user=normal_user)
 
-    data = {
-        "name": "Test Player"
-    }
+    data = {"name": "Test Player"}
 
     res = client.post(player_endpoint, data)
     assert res.status_code == status.HTTP_200_OK
@@ -28,15 +26,9 @@ def test_cant_see_other_users_players(normal_user, second_user):
 
     player_name = "First Player User"
 
-    models.Player.objects.create(
-        name="Second User Player",
-        added_by=second_user
-    )
+    models.Player.objects.create(name="Second User Player", added_by=second_user)
 
-    models.Player.objects.create(
-        name=player_name,
-        added_by=normal_user
-    )
+    models.Player.objects.create(name=player_name, added_by=normal_user)
 
     player_list = client.get(player_endpoint)
     assert len(player_list.data) == 1
@@ -49,10 +41,7 @@ def test_create_game_works(normal_user, golf_course):
     client = APIClient()
     client.force_authenticate(user=normal_user)
 
-    data = {
-        "course": golf_course.id,
-        "holes_played": golf_course.hole_count
-    }
+    data = {"course": golf_course.id, "holes_played": golf_course.hole_count}
 
     res = client.post(game_endpoint, data)
     assert res.status_code == status.HTTP_201_CREATED
@@ -64,10 +53,7 @@ def test_create_game_without_course_returns_error(normal_user):
     client = APIClient()
     client.force_authenticate(user=normal_user)
 
-    data = {
-        "course": "",
-        "holes_played": "9"
-    }
+    data = {"course": "", "holes_played": "9"}
 
     res = client.post(game_endpoint, data)
     assert res.status_code == status.HTTP_400_BAD_REQUEST
@@ -80,9 +66,7 @@ def test_add_player_to_game_works(normal_user, golf_game, player):
     client = APIClient()
     client.force_authenticate(user=normal_user)
 
-    data = {
-        "player": player.id
-    }
+    data = {"player": player.id}
 
     res = client.post(add_player_endpoint, data)
     assert res.status_code == status.HTTP_200_OK
@@ -94,10 +78,10 @@ def test_add_player_to_game_works(normal_user, golf_game, player):
 @pytest.mark.django_db
 def test_remove_player_from_game_works(normal_user, golf_game_with_player):
     player = golf_game_with_player.players.all().first()
-    remove_player_endpoint = reverse("api:game-remove_player", args=[golf_game_with_player.id])
-    data = {
-        "player": player.id
-    }
+    remove_player_endpoint = reverse(
+        "api:game-remove_player", args=[golf_game_with_player.id]
+    )
+    data = {"player": player.id}
     client = APIClient()
     client.force_authenticate(user=normal_user)
 
@@ -111,7 +95,9 @@ def test_remove_player_from_game_works(normal_user, golf_game_with_player):
 
 
 @pytest.mark.django_db
-def test_add_player_to_game_with_no_player_returns_error(normal_user, golf_game, player):
+def test_add_player_to_game_with_no_player_returns_error(
+    normal_user, golf_game, player
+):
     add_player_endpoint = reverse("api:game-add_player", args=[golf_game.id])
 
     client = APIClient()
@@ -126,15 +112,7 @@ def test_add_player_to_game_with_no_player_returns_error(normal_user, golf_game,
 @pytest.mark.django_db
 def test_set_hole_score_for_game(normal_user, golf_game_with_player, player):
     add_score_endpoint = reverse("api:game-set_score", args=[golf_game_with_player.id])
-    data = {
-        "hole_number": 1,
-        "score_list": [
-            {
-                "player": player.id,
-                "score": 3
-            }
-        ]
-    }
+    data = {"hole_number": 1, "score_list": [{"player": player.id, "score": 3}]}
 
     client = APIClient()
     client.force_authenticate(user=normal_user)
