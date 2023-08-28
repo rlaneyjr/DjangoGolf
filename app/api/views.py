@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 from . import serializers
 from home import models
 from home import utils
@@ -37,7 +38,7 @@ class GameViewSet(viewsets.ModelViewSet):
     def create(self, request):
         if not hasattr(request.user, "player"):
             return Response(
-                {"message" "You must setup a player to start a game"}, status=400
+                {"message": settings.CONSTANTS["PLAYER_NOT_SETUP"]}, status=400
             )
 
         serializer = serializers.GameSerializer(
