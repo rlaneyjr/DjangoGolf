@@ -1,5 +1,6 @@
 import pytest
 from django.shortcuts import reverse
+from django.conf import settings
 from rest_framework.test import APIClient
 from rest_framework import status
 from home import models
@@ -126,6 +127,25 @@ def test_set_hole_score_for_game(normal_user, golf_game_with_player, player):
 
     hole_score.refresh_from_db()
     assert hole_score.score == 3
+
+
+@pytest.mark.django_db
+def test_start_game_with_user_that_has_no_player_returns_error(
+    normal_user, golf_course
+):
+    start_game_endpoint = reverse("api:game-list")
+
+    data = {
+        "course": golf_course.id,
+        "holes_played": golf_course.hole_count,
+    }
+
+    client = APIClient()
+    client.force_authenticate(user=normal_user)
+
+    res = client.post(start_game_endpoint, data)
+    assert settings.CONSTANTS["PLAYER_NOT_SETUP"] == res.data["message"]
+    assert res.status_code == status.HTTP_400_BAD_REQUEST
 
 
 # @pytest.mark.django_db
