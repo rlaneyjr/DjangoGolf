@@ -100,7 +100,13 @@
                         <tr>
                             <td>{{hole.player}}</td>
                             {% if game_data.status == "active" %}
-                                <td><input type="number" min-value=1, max-value=8 class="form-control hole-score" size=1 value="{{hole.score}}" data-hole-score-id="{{hole.hole_score_id}}" /></td>
+                                <td>
+                                    <div class="input-group mb-3">
+                                        <button class="btn btn-outline-secondary adjust-hole-score" type="button" data-action="subtract-score" data-hole-score-id="{{hole.hole_score_id}}">-</button>                                        
+                                        <input type="text" class="form-control hole-score" size=1 value="{{hole.score}}" data-hole-score-id="{{hole.hole_score_id}}" />
+                                        <button class="btn btn-outline-secondary adjust-hole-score" type="button" data-action="add-score" data-hole-score-id="{{hole.hole_score_id}}">+</button>
+                                    </div>
+                                </td>
                             {% else %}
                                 <td>{{hole.score}}</td>
                             {% endif %}
@@ -427,6 +433,20 @@
     document.getElementById("hole-jump")?.addEventListener("change", (event) => {
         const newHole = event.target.value;
         window.location.href = baseHoleUrl + newHole;
+    });
+
+    document.querySelectorAll(".adjust-hole-score").forEach((el) => {
+        el.addEventListener("click", (event) => {
+            const action = event.target.dataset.action;
+            const holeScoreId = event.target.dataset.holeScoreId;
+            const scoreEl = document.querySelector(".hole-score[data-hole-score-id='" + holeScoreId + "']");
+            
+            if (action == "add-score") {
+                scoreEl.value = parseInt(scoreEl.value) + 1;
+            } else if (action == "subtract-score") {
+                scoreEl.value = parseInt(scoreEl.value) - 1;
+            }
+        });
     });
 </script>
 {% endblock %}
